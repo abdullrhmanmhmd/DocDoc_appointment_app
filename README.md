@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🏥 Docdoc — Doctor Appointment App
 
 
