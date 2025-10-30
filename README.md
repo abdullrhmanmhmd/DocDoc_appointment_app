@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏥 Docdoc — Doctor Appointment App
 
 
@@ -43,3 +44,21 @@ It showcases modern UI design principles, responsive layouts, and clean, maintai
 1. **Clone the repository**
    ```bash
    git clone https://github.com/abdullrhmanmhmd/docdoc.git
+=======
+# doc_app_sw
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+>>>>>>> 97a5425 (Initiating the app)
