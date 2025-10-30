@@ -1,1 +1,44 @@
-# DocDoc_appointment_app
+# 🏥 Docdoc — Doctor Appointment App
+
+<img width="3200" height="1928" alt="Doc_github" src="https://github.com/user-attachments/assets/b8422325-3d73-40f9-9eb2-c830df69ff03" />
+
+
+## 📖 Overview
+
+**Docdoc** is a Flutter-based mobile application developed as a collaborative project by a team of students:  
+**Abdelrhman Mohamed Mahmoud**, **Haydi Mostafa**, **Lina Ashraf Sediq**, and **AlaaAllah Arafa**.  
+
+The app focuses on building essential mobile development skills using Flutter and Dart — featuring user login, profile editing, and smooth navigation between screens.  
+It showcases modern UI design principles, responsive layouts, and clean, maintainable code structure.
+
+
+---
+
+## 🚀 Features
+
+- 🔐 **User Login & Authentication** — Secure sign-in flow with email and password validation.  
+- 👤 **Edit User Profile** — Update personal details such as name, email, and profile picture in real time.  
+- 🧭 **Smooth Navigation** — Seamless transition between login, home, and profile edit screens.  
+- 💾 **Form Validation** — Smart form handling with real-time error messages and input validation.   
+- 📅 **Appointment Booking** — Select a date, time, and type (in-person or virtual).  
+- 🎨 **Modern UI** — Clean, responsive, and user-friendly Flutter interface.  
+
+---
+
+## Participants
+
+| Name | ID |
+|-----------|--------|
+| **Abdelrhman Mohamed Mahmoud** | 231000262 |
+| **Haydi Mostafa** | 231000076|
+| **Lina Ashraf Sediq** | 231001820 |
+| **AlaaAllah Arafa** |AlaaAllah Arafa  |
+
+
+---
+
+## ⚙️ Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/abdullrhmanmhmd/docdoc.git
