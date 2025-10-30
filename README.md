@@ -1,6 +1,7 @@
 # 🏥 Docdoc — Doctor Appointment App
 
-<img width="3200" height="1928" alt="Doc_github" src="https://github.com/user-attachments/assets/b8422325-3d73-40f9-9eb2-c830df69ff03" />
+
+<img width="3200" height="1928" alt="Doc_github" src="https://github.com/user-attachments/assets/055b54e3-1659-4c68-9ea5-727ae1debf11" />
 
 
 ## 📖 Overview
