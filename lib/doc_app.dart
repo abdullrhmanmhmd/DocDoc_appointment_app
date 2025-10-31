@@ -1,13 +1,13 @@
 import 'package:doc_app_sw/color_theme.dart';
-import 'package:doc_app_sw/routing/app_router.dart';
-import 'package:doc_app_sw/routing/routes.dart';
+
+import 'package:doc_app_sw/ui/onboarding/on_boarding_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DocApp extends StatelessWidget {
-  const DocApp({super.key, required this.appRouter});
-  final AppRouter appRouter;
+  const DocApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -20,8 +20,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        onGenerateRoute: appRouter.generateRoute,
-        initialRoute: Routes.onboardingScreen,
+        home: OnboardingScreen(),
       ),
     );
   }
