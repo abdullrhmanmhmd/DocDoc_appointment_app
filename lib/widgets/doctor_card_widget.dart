@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
 import '../models/doctor.dart';
+
 
 class DoctorCardWidget extends StatelessWidget {
   final Doctor doctor;
   const DoctorCardWidget({super.key, required this.doctor});
+
 
   @override
   Widget build(BuildContext context) {
