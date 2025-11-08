@@ -38,12 +38,7 @@ It showcases modern UI design principles, responsive layouts, and clean, maintai
 
 ---
 
-## ⚙️ Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/abdullrhmanmhmd/docdoc.git
-=======
 # doc_app_sw
 
 A new Flutter project.
@@ -60,4 +55,20 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
->>>>>>> 97a5425 (Initiating the app)
+
+
+# Team Tasks Distribution
+
+| # | Team Member | Responsibilities |
+|---|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 | **Abdelrahman Mohamed Mahmoud** | **Authentication & Intro Screens** <br> • Splash Screen – app logo animation and loading <br> • Onboarding Screen (optional) – app intro / “Get Started” <br> • Login Screen – email + password fields, validation <br> • Signup Screen – name, email, password, confirm password <br> • Forgot Password Screen (optional) |
+| 2 | **Lina Ashraf Sediq** | **Doctor Listing & Details Screens** <br> • Home Screen – show list of doctors <br> • Doctor Card Widget – doctor’s name, specialty, rating, image <br> • Doctor Details Screen – doctor’s info, biography, hospital, contact <br> • Search / Filter Screen – search by name or specialty |
+| 3 | **AlaaAllah Arafa** | **Appointment Booking Screens** <br> • Appointment Form Screen – choose doctor, date, time, notes <br> • Appointment Confirmation Screen – booking success + summary <br> • My Appointments Screen – list user’s upcoming/past appointments <br> • Cancel Appointment Dialog / Popup (optional) |
+| 4 | **Haydi Mostafa** | **Profile & Settings Screens** <br> • Profile Screen – show user name, photo, email <br> • Edit Profile Screen – allow user to update info/photo <br> • Settings Screen – logout button, app info, notifications toggle <br> • About Page (optional) |
+
+## ⚙️ Installation
+
+**Clone the repository**
+   ```bash
+   git clone https://github.com/abdullrhmanmhmd/docdoc.git
+
