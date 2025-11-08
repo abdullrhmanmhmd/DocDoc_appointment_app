@@ -8,8 +8,6 @@ plugins {
 android {
     namespace = "com.example.doc_app_sw"
     compileSdk = flutter.compileSdkVersion
-
-    ndkVersion = flutter.ndkVersion
     ndkVersion = "29.0.14206865"
 
     compileOptions {
@@ -29,8 +27,6 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
-
-        versionName = flutter.versionName
         versionName = "29.0.14206865"
     }
 
