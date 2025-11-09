@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/doctor.dart';
+import '../color_theme.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   final Doctor doctor;
@@ -9,9 +10,13 @@ class DoctorDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.myWhite,
       appBar: AppBar(
-        title: Text(doctor.name),
-        backgroundColor: Colors.teal,
+        title: Text(
+          doctor.name,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: MyColors.myBlue,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -36,6 +41,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   Text(
@@ -46,28 +52,22 @@ class DoctorDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber),
-                      const SizedBox(width: 5),
-                      Text(
-                        doctor.rating.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 30),
 
-            // this is the biography
-            const Text(
+
+            Text(
               'Biography',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: MyColors.myBlue,
+              ),
             ),
+
             const SizedBox(height: 10),
             Text(
               doctor.biography,
@@ -76,11 +76,16 @@ class DoctorDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // here is the hospital information
-            const Text(
+
+            Text(
               'Hospital',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: MyColors.myBlue,
+              ),
             ),
+
             const SizedBox(height: 10),
             Text(
               doctor.hospital,
@@ -90,9 +95,13 @@ class DoctorDetailsScreen extends StatelessWidget {
             const SizedBox(height: 25),
 
             // this is the contact information
-            const Text(
+            Text(
               'Contact',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: MyColors.myBlue,
+              ),
             ),
             const SizedBox(height: 10),
             Text(
@@ -102,7 +111,7 @@ class DoctorDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // here is the Book Appointment Button //
+            // here is the book appointment button
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
@@ -115,8 +124,9 @@ class DoctorDetailsScreen extends StatelessWidget {
                 icon: const Icon(Icons.calendar_today),
                 label: const Text('Book Appointment'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  backgroundColor: MyColors.myBlue,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   textStyle: const TextStyle(fontSize: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
