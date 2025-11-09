@@ -38,15 +38,6 @@ It showcases modern UI design principles, responsive layouts, and clean, maintai
 
 ---
 
-
-# doc_app_sw
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
 A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
@@ -66,9 +57,4 @@ samples, guidance on mobile development, and a full API reference.
 | 3 | **AlaaAllah Arafa** | **Appointment Booking Screens** <br> • Appointment Form Screen – choose doctor, date, time, notes <br> • Appointment Confirmation Screen – booking success + summary <br> • My Appointments Screen – list user’s upcoming/past appointments <br> • Cancel Appointment Dialog / Popup (optional) |
 | 4 | **Haydi Mostafa** | **Profile & Settings Screens** <br> • Profile Screen – show user name, photo, email <br> • Edit Profile Screen – allow user to update info/photo <br> • Settings Screen – logout button, app info, notifications toggle <br> • About Page (optional) |
 
-## ⚙️ Installation
-
-**Clone the repository**
-   ```bash
-   git clone https://github.com/abdullrhmanmhmd/docdoc.git
 
