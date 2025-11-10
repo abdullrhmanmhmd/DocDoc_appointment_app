@@ -15,12 +15,14 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Project dependencies
-  dio: ^5.4.0
-  equatable: ^2.0.5
-  flutter_bloc: ^8.1.6
-  flutter_svg: ^2.0.10
-  flutter_screenutil: ^5.9.1
-  flutter_native_splash: ^2.4.1
+  dio:
+  equatable:
+  flutter_bloc:
+  flutter_svg:
+  flutter_screenutil:
+  flutter_native_splash:
+  shared_preferences:
+  skeletonizer:
 
 dev_dependencies:
   flutter_test:

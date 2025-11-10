@@ -1,4 +1,4 @@
-import 'package:doc_app_sw/color_theme.dart';
+import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/ui/login/widgets/dont_have_account_text.dart';
 import 'package:doc_app_sw/ui/login/widgets/login_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';

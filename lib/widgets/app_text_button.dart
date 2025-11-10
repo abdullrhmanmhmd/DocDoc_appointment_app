@@ -1,4 +1,4 @@
-import 'package:doc_app_sw/color_theme.dart';
+import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
