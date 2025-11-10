@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/models/doctor.dart';
 import 'package:doc_app_sw/screens/home_screen.dart';
+import 'package:doc_app_sw/widgets/doctor_card_widget.dart';
 
 class DocApp extends StatelessWidget {
   const DocApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        home:HomeScreen(doctors: doctors),
+        home: DoctorCardWidget(doctor: doctors[0]),
       ),
     );
   }
