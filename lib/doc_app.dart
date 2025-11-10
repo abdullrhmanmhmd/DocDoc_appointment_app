@@ -1,7 +1,7 @@
 import 'package:doc_app_sw/screens/doctor_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:doc_app_sw/color_theme.dart';
+import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/models/doctor.dart';
 
 class DocApp extends StatelessWidget {

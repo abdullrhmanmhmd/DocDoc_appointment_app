@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/doctor.dart';
-import '../color_theme.dart';
+import '../core/constants/color_theme.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   final Doctor doctor;
