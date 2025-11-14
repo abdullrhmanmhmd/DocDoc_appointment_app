@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../color_theme.dart';
-import '../../models/doctor.dart';
-import '../../widgets/doctor_card_widget.dart';
-import '../core/constants/color_theme.dart';
+import '../logic/models/doctor.dart';
+import '../widgets/doctor_card_widget.dart';
+
 
 class HomeScreen extends StatelessWidget {
   final List<Doctor> doctors;

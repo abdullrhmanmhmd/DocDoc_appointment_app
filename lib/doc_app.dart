@@ -2,9 +2,7 @@ import 'package:doc_app_sw/screens/doctor_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doc_app_sw/core/constants/color_theme.dart';
-import 'package:doc_app_sw/models/doctor.dart';
-import 'package:doc_app_sw/screens/home_screen.dart';
-import 'package:doc_app_sw/widgets/doctor_card_widget.dart';
+import 'package:doc_app_sw/logic/models/doctor.dart';
 
 class DocApp extends StatelessWidget {
   const DocApp({super.key});
