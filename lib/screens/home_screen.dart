@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/doctor.dart';
+import '../logic/models/doctor.dart';
 import '../widgets/doctor_card_widget.dart';
 
 
