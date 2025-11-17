@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../widgets/doctor_card_widget.dart';
 
@@ -17,7 +19,8 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // this is the greeting section
+
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -25,7 +28,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hi, mohamed 👋",
+                        "Hi, Momon👋",
                         style: TextStyle(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
@@ -91,7 +94,8 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 30.h),
 
-              // here are the categories
+
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
