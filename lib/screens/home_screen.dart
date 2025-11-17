@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../widgets/doctor_card_widget.dart';
+import '../screens/search_screen.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -13,6 +14,32 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.myWhite,
+
+      appBar: AppBar(
+        backgroundColor: MyColors.myWhite,
+        elevation: 0,
+        title: Text(
+          "Home",
+          style: TextStyle(
+            color: MyColors.myBlue,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchScreen(doctors: doctors),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
