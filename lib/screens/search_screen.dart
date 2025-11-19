@@ -3,6 +3,7 @@ import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/widgets/doctor_card_widget.dart';
 
 import '../logic/models/doctor.dart';
+import 'my_appointments_screen.dart';
 
 
 class SearchScreen extends StatefulWidget {
@@ -33,6 +34,18 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: MyColors.myBlue,
         title: const Text("Search Doctors"),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.event_note),
+            tooltip: 'My Appointments',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const MyAppointmentsScreen()),
+              );
+            },
+          ),
+        ],
       ),
 
       body: Padding(

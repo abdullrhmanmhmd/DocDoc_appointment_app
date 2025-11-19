@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../logic/models/doctor.dart';
 import '../core/constants/color_theme.dart';
+import 'appointment_form_screen.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   final Doctor doctor;
@@ -115,9 +116,10 @@ class DoctorDetailsScreen extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Booking with ${doctor.name} coming soon!'),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AppointmentFormScreen(initialDoctor: doctor),
                     ),
                   );
                 },
@@ -126,7 +128,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyColors.myBlue,
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   textStyle: const TextStyle(fontSize: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
