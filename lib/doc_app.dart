@@ -5,6 +5,8 @@ import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/logic/models/doctor.dart';
 import 'package:doc_app_sw/widgets/doctor_card_widget.dart';
 import 'package:doc_app_sw/screens/search_screen.dart';
+import 'package:doc_app_sw/screens/home_screen.dart';
+
 
 
 
@@ -35,7 +37,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        home: SearchScreen(doctors: doctors),
+        home: HomeScreen(doctors: doctors),
       ),
     );
   }
