@@ -14,10 +14,12 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
+
 class _SearchScreenState extends State<SearchScreen> {
   String query = "";
 
   @override
+
 
   Widget build(BuildContext context) {
 
@@ -26,6 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
       return doctor.name.toLowerCase().contains(query.toLowerCase()) ||
           doctor.specialty.toLowerCase().contains(query.toLowerCase());
     }).toList();
+
 
     return Scaffold(
       backgroundColor: MyColors.myWhite,
@@ -41,9 +44,12 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
 
 
+
+
+
             TextField(
               decoration: InputDecoration(
-                hintText: "Search by name or specialty...",
+                hintText: "Search by name or specialty....",
                 filled: true,
                 fillColor: MyColors.myWhite,
                 prefixIcon: const Icon(Icons.search),
@@ -59,6 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
 
             const SizedBox(height: 20),
+
 
 
 
