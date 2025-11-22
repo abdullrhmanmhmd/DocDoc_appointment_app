@@ -23,7 +23,8 @@ class DoctorDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // this is the doctor image
+
+
             Center(
               child: CircleAvatar(
                 radius: 70,
@@ -32,7 +33,7 @@ class DoctorDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // here is the name and specialty
+
             Center(
               child: Column(
                 children: [
@@ -94,7 +95,8 @@ class DoctorDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // this is the contact information
+
+
             Text(
               'Contact',
               style: TextStyle(
@@ -111,7 +113,8 @@ class DoctorDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // here is the book appointment button
+
+
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
@@ -121,7 +124,11 @@ class DoctorDetailsScreen extends StatelessWidget {
                     ),
                   );
                 },
-                icon: const Icon(Icons.calendar_today),
+
+
+
+
+              icon: const Icon(Icons.calendar_today),
                 label: const Text('Book Appointment'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyColors.myBlue,
