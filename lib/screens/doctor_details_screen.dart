@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import '../logic/models/doctor.dart';
 import '../core/constants/color_theme.dart';
+import 'appointment_form_screen.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   final Doctor doctor;
 
-  const DoctorDetailsScreen({Key? key, required this.doctor}) : super(key: key);
+  const DoctorDetailsScreen({super.key, required this.doctor});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.myWhite,
       appBar: AppBar(
-        title: Text(
-          doctor.name,
-          style: const TextStyle(color: Colors.white),
-        ),
+        title: Text(doctor.name, style: const TextStyle(color: Colors.white)),
         backgroundColor: MyColors.myBlue,
       ),
       body: SingleChildScrollView(
@@ -23,8 +21,6 @@ class DoctorDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-
             Center(
               child: CircleAvatar(
                 radius: 70,
@@ -32,7 +28,6 @@ class DoctorDetailsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
 
             Center(
               child: Column(
@@ -47,10 +42,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                   ),
                   Text(
                     doctor.specialty,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -58,7 +50,6 @@ class DoctorDetailsScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 30),
-
 
             Text(
               'Biography',
@@ -77,7 +68,6 @@ class DoctorDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-
             Text(
               'Hospital',
               style: TextStyle(
@@ -88,14 +78,9 @@ class DoctorDetailsScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 10),
-            Text(
-              doctor.hospital,
-              style: const TextStyle(fontSize: 16),
-            ),
+            Text(doctor.hospital, style: const TextStyle(fontSize: 16)),
 
             const SizedBox(height: 25),
-
-
 
             Text(
               'Contact',
@@ -106,34 +91,30 @@ class DoctorDetailsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Text(
-              doctor.contact,
-              style: const TextStyle(fontSize: 16),
-            ),
+            Text(doctor.contact, style: const TextStyle(fontSize: 16)),
 
             const SizedBox(height: 30),
-
-
 
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Booking with ${doctor.name} coming soon!'),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          AppointmentFormScreen(selectedDoctor: doctor),
                     ),
                   );
                 },
 
-
-
-
-              icon: const Icon(Icons.calendar_today),
+                icon: const Icon(Icons.calendar_today),
                 label: const Text('Book Appointment'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyColors.myBlue,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 12,
+                  ),
                   textStyle: const TextStyle(fontSize: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -147,4 +128,3 @@ class DoctorDetailsScreen extends StatelessWidget {
     );
   }
 }
-
