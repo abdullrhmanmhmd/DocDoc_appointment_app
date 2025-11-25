@@ -4,7 +4,8 @@ class ApiError {
 
   ApiError({required this.massage, this.statusCode});
 
+  @override
   String toString() {
-    return '$massage';
+    return massage;
   }
 }

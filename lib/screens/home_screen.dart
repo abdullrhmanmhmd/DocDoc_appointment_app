@@ -4,7 +4,7 @@ import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../widgets/doctor_card_widget.dart';
 import '../screens/search_screen.dart';
-
+import '../screens/my_appointments_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Doctor> doctors;
@@ -20,10 +20,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           "Home",
-          style: TextStyle(
-            color: MyColors.myBlue,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: MyColors.myBlue, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -37,6 +34,17 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.calendar_today, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MyAppointmentsScreen(),
+                ),
+              );
+            },
+          ),
         ],
       ),
 
@@ -46,8 +54,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -80,7 +86,6 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 25.h),
 
-
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(20.w),
@@ -105,7 +110,8 @@ class HomeScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.r)),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
                       ),
                       onPressed: () {},
                       child: Text(
@@ -120,8 +126,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30.h),
-
-
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +161,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30.h),
-
 
               Text(
                 "Recommendation Doctor",
@@ -213,6 +216,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-
