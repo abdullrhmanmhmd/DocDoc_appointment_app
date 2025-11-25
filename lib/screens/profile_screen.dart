@@ -2,6 +2,7 @@ import 'package:docdoc/core/constants/my_colors.dart';
 import 'package:docdoc/core/network/api_error.dart';
 import 'package:docdoc/logic/auth/auth_repo.dart';
 import 'package:docdoc/logic/models/user_model.dart';
+// import 'package:docdoc/logic/auth/user_model.dart';
 import 'package:docdoc/ui/login/login_screen.dart';
 import 'package:docdoc/ui/profile/update_profile_screen.dart';
 import 'package:docdoc/ui/profile/widgets/profile_text_field.dart';
@@ -367,13 +368,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 onPressed: logout,
-                                child: Text(
-                                  'Log Out',
-                                  style: TextStyle(
-                                    color: MyColors.myBlue,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Log Out',
+                                      style: TextStyle(
+                                        color: MyColors.myBlue,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Icon(
+                                      Icons.logout,
+                                      color: MyColors.myBlue,
+                                      size: 22.sp,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
