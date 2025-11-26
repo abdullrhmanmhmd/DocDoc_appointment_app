@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 "Profile",
                 style: TextStyle(
                   color: MyColors.myWhite,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icon(
                   CupertinoIcons.back,
                   color: MyColors.myWhite,
-                  size: 25.sp,
+                  size: 25,
                 ),
                 onPressed: () {},
               ),
@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Icon(
                   CupertinoIcons.gear_alt_fill,
                   color: MyColors.myWhite,
-                  size: 25.sp,
+                  size: 25,
                 ),
               ),
             ],
@@ -115,8 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     color: MyColors.myWhite,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25.sp),
-                      topRight: Radius.circular(25.sp),
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
                     ),
                   ),
                 ),
@@ -134,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Icon(
                       Icons.person,
                       color: MyColors.myWhite,
-                      size: 80.sp,
+                      size: 80,
                     ),
                   ),
                 ),
@@ -149,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Text(
                           userModel?.name ?? 'Loading..',
                           style: TextStyle(
-                            fontSize: 24.sp,
+                            fontSize: 24,
                             fontWeight: FontWeight.w600,
                             color: MyColors.myBlack,
                           ),
@@ -160,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Text(
                           userModel?.email ?? 'Loading..',
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 16,
                             fontWeight: FontWeight.w400,
                             color: MyColors.myGrey,
                           ),
@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 59.h,
                           decoration: BoxDecoration(
                             color: Color.fromRGBO(248, 248, 248, 1),
-                            borderRadius: BorderRadius.circular(16.sp),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: Container(
                             decoration: BoxDecoration(
@@ -192,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Text(
                                       "My Appointment",
                                       style: TextStyle(
-                                        fontSize: 14.sp,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         color: MyColors.myBlack,
                                       ),
@@ -211,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Text(
                                       "Medical records",
                                       style: TextStyle(
-                                        fontSize: 14.sp,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         color: MyColors.myBlack,
                                       ),
@@ -233,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(width: 16.w),
                           Text("Personal Information",style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 16,
                             fontWeight: FontWeight.w400,
                             color: MyColors.myBlack,
                           ),)
@@ -254,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(width: 16.w),
                         Text("My Test & Diagnostic",style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: MyColors.myBlack,
                         ),)
@@ -274,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(width: 16.w),
                         Text("Payment",style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: MyColors.myBlack,
                         ),)
@@ -293,7 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Container(
                               height: 55.h,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.sp),
+                                borderRadius: BorderRadius.circular(16),
                                 color: MyColors.myBlue,
                               ),
                               child: TextButton(
@@ -321,7 +321,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       'Edit Profile',
                                       style: TextStyle(
                                         color: MyColors.myWhite,
-                                        fontSize: 18.sp,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -329,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Icon(
                                       CupertinoIcons.pencil,
                                       color: MyColors.myWhite,
-                                      size: 22.sp,
+                                      size: 22,
                                     ),
                                   ],
                                 ),
@@ -354,10 +354,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: MyColors.myBlue,
-                                  width: 0.8.sp,
+                                  width: 0.8,
                                 ),
                                 borderRadius: BorderRadius.circular(
-                                  16.sp,
+                                  16,
                                 ),
                                 color: MyColors.myWhite,
                               ),
@@ -376,7 +376,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       'Log Out',
                                       style: TextStyle(
                                         color: MyColors.myBlue,
-                                        fontSize: 18.sp,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -384,7 +384,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Icon(
                                       Icons.logout,
                                       color: MyColors.myBlue,
-                                      size: 22.sp,
+                                      size: 22,
                                     ),
                                   ],
                                 ),
