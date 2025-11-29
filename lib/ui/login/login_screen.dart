@@ -6,6 +6,7 @@ import 'package:doc_app_sw/ui/login/widgets/dont_have_account_text.dart';
 import 'package:doc_app_sw/ui/login/widgets/login_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
+import 'package:doc_app_sw/widgets/custom_snack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -40,9 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
         error = e.massage;
       }
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        customSnack(error),
+      );
     } finally {
       setState(() => isLoading = false);
     }
