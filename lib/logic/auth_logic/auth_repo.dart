@@ -34,4 +34,20 @@ class AuthRepo {
   }
 
 
+}///Get Profile Data
+Future<UserModel?> getProfile() async {
+  try {
+    final response = await apiServices.get('user/profile');
+
+    if (response is ApiError) {
+      throw response;
+    }
+    final data = response['data'];
+    final userJson = (data is List && data.isNotEmpty) ? data.first : data;
+    return UserModel.fromJson(userJson);
+  } on DioException catch (e) {
+    throw ApiExceptions.handleError(e);
+  } catch (e) {
+    throw ApiError(massage: e.toString());
+  }
 }
