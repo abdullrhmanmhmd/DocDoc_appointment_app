@@ -58,3 +58,167 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+@override
+Widget build(BuildContext context) {
+  return RefreshIndicator(
+      displacement: 60,
+      onRefresh: () async {
+        FocusScope.of(context).unfocus();
+        await getProfileData();
+      },
+      color: MyColors.myBlue,
+      backgroundColor: MyColors.myWhite,
+      child: Skeletonizer(
+          enabled: userModel == null,
+          child: Scaffold(
+              backgroundColor: MyColors.myBlue,
+              appBar: AppBar(
+                backgroundColor: MyColors.myBlue,
+                elevation: 0,
+                centerTitle: true,
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 25),
+                  child: Text(
+                    "Profile",
+                    style: TextStyle(
+                      color: MyColors.myWhite,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 25),
+                  child: IconButton(
+                    icon: Icon(
+                      CupertinoIcons.back,
+                      color: MyColors.myWhite,
+                      size: 25.sp,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 25, right: 16),
+                    child: Icon(
+                      CupertinoIcons.gear_alt_fill,
+                      color: MyColors.myWhite,
+                      size: 25.sp,
+                    ),
+                  ),
+                ],
+              ),
+              body: SingleChildScrollView(
+                child: Stack(
+                  children: [
+                  Container(
+                  width: 375.w,
+                  height: 620.h,
+                  margin: EdgeInsets.only(top: 100.h),
+                  decoration: BoxDecoration(
+                    color: MyColors.myWhite,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25.sp),
+                      topRight: Radius.circular(25.sp),
+                    ),
+                  ),
+                ),
+
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 42.h),
+                    width: 130.w,
+                    height: 130.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color.fromRGBO(230, 219, 255, 1.0),
+                      border: Border.all(
+                        color: MyColors.myWhite,
+                        width: 6.w,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.person,
+                      color: MyColors.myWhite,
+                      size: 80.sp,
+                    ),
+                  ),
+                ),
+
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: 180.h, left: 24.w, right: 24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Center(
+                  child: Text(
+                  userModel?.name ?? 'Loading..',
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w600,
+                      color: MyColors.myBlack,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Center(
+                  child: Text(
+                    userModel?.email ?? 'Loading..',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: MyColors.myGrey,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 24.h),
+
+                // My Appointments + Records widget
+                Center(
+                  child: Container(
+                    width: 330.w,
+                    height: 59.h,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(248, 248, 248, 1),
+                      borderRadius: BorderRadius.circular(16.sp),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "My Appointment",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: MyColors.myBlack,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 40.h,
+                          width: 2,
+                          color: MyColors.myLightGrey,
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "Medical records",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: MyColors.myBlack,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 24.h),
+
