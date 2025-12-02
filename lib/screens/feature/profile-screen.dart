@@ -221,4 +221,179 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 SizedBox(height: 24.h),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20.r,
+                            child: SvgPicture.asset("assets/svgs/Icon (1).svg"),
+                          ),
+                          SizedBox(width: 16.w),
+                          Text(
+                            "Personal Information",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                              color: MyColors.myBlack,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 16.h),
+                      Container(
+                        width: double.infinity,
+                        height: 1,
+                        color: MyColors.myLightGrey,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20.r,
+                            child: SvgPicture.asset("assets/svgs/Icon (2).svg"),
+                          ),
+                          SizedBox(width: 16.w),
+                          Text(
+                            "My Test & Diagnostic",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                              color: MyColors.myBlack,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 16.h),
+                      Container(
+                        width: double.infinity,
+                        height: 1,
+                        color: MyColors.myLightGrey,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20.r,
+                            child: SvgPicture.asset("assets/svgs/Icon (3).svg"),
+                          ),
+                          SizedBox(width: 16.w),
+                          Text(
+                            "Payment",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                              color: MyColors.myBlack,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 29.h),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Edit Profile Button
+                          Expanded(
+                            child: Container(
+                              height: 55.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.sp),
+                                color: MyColors.myBlue,
+                              ),
+                              child: TextButton(
+                                onPressed: () async {
+                                  final updated =
+                                  await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdateProfileScreen(),
+                                    ),
+                                  );
+                                  if (updated == true) {
+                                    await getProfileData();
+                                  }
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Edit Profile',
+                                      style: TextStyle(
+                                        color: MyColors.myWhite,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Icon(
+                                      CupertinoIcons.pencil,
+                                      color: MyColors.myWhite,
+                                      size: 22.sp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(width: 12.w),
+
+                          // Logout Button
+                          Expanded(
+                            child: isLoading
+                                ? Center(
+                              child: CircularProgressIndicator(
+                                color: MyColors.myBlue,
+                                strokeWidth: 2,
+                                backgroundColor: MyColors.myWhite,
+                              ),
+                            )
+                                : Container(
+                              height: 55.h,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: MyColors.myBlue,
+                                  width: 0.8.sp,
+                                ),
+                                borderRadius: BorderRadius.circular(16.sp),
+                                color: MyColors.myWhite,
+                              ),
+                              child: TextButton(
+                                onPressed: logout,
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Log Out',
+                                      style: TextStyle(
+                                        color: MyColors.myBlue,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Icon(
+                                      Icons.logout,
+                                      color: MyColors.myBlue,
+                                      size: 22.sp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                  ],
+                ),
+              ),
+          ),
+      ),
+  );
+}
 
