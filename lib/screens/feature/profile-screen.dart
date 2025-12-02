@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => ALoginScreen(),
+        builder: (context) => LoginScreen(),
       ),
     );
   }
