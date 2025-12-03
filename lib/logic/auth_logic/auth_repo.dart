@@ -32,6 +32,7 @@ class AuthRepo {
       throw ApiExceptions.handleError(e);
     }
   }
+  ///get profile
   Future<UserModel?> getProfile() async {
     try {
       final response = await apiServices.get('user/profile');
