@@ -6,6 +6,7 @@ import 'package:doc_app_sw/ui/login/widgets/dont_have_account_text.dart';
 import 'package:doc_app_sw/ui/login/widgets/login_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
+import 'package:doc_app_sw/widgets/bottom_navigation.dart';
 import 'package:doc_app_sw/widgets/custom_snack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
+      if (user != null && user.token != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigationWidget()),
+        );
+      }
     } catch (e) {
       String error = "Login not working";
       if (e is ApiError) {
