@@ -1,4 +1,5 @@
 import 'package:doc_app_sw/screens/doctor_details_screen.dart';
+import 'package:doc_app_sw/ui/onboarding/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doc_app_sw/core/constants/color_theme.dart';
@@ -61,7 +62,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        home:LoginScreen(),
+        home:OnboardingScreen(),
       ),
     );
   }
