@@ -6,7 +6,8 @@ import '../logic/models/doctor.dart';
 
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  final List<Doctor> doctors;
+  const SearchScreen({Key? key, required this.doctors}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();

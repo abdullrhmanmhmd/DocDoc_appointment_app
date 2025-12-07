@@ -7,16 +7,18 @@ class FirestoreService {
   Stream<List<Doctor>> getDoctors() {
     return _db.collection('doctors').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
         return Doctor(
-          name: doc['name'],
-          specialty: doc['specialty'],
-          rating: doc['rating'],
-          image: doc['image'],
-          biography: doc['biography'],
-          hospital: doc['hospital'],
-          contact: doc['contact'],
+          name: data['name'] as String? ?? '',
+          specialty: data['specialty'] as String? ?? '',
+          rating: (data['rating'] as num?)?.toDouble() ?? 0.0,
+          image: data['image'] as String? ?? '',
+          biography: data['biography'] as String? ?? '',
+          hospital: data['hospital'] as String? ?? '',
+          contact: data['contact'] as String? ?? '',
         );
       }).toList();
     });
   }
 }
+

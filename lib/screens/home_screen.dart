@@ -8,7 +8,10 @@ import '../screens/search_screen.dart';
 import '../screens/my_appointments_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-    const HomeScreen({super.key});
+  final List<Doctor> doctors;
+
+  const HomeScreen({Key? key, required this.doctors}) : super(key: key);
+
 
 
 
@@ -32,7 +35,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchScreen(),
+                  builder: (context) => SearchScreen(doctors: []),
                 ),
               );
             },
