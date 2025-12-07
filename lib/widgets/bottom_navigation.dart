@@ -1,5 +1,6 @@
 
 import 'package:doc_app_sw/core/constants/color_theme.dart';
+import 'package:doc_app_sw/logic/models/user_model.dart';
 import 'package:doc_app_sw/screens/home_screen.dart';
 import 'package:doc_app_sw/screens/my_appointments_screen.dart';
 import 'package:doc_app_sw/screens/profile_screen.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class BottomNavigationWidget extends StatefulWidget {
   // final UserModel userModel;
 
-  const BottomNavigationWidget({super.key});
+  const BottomNavigationWidget({super.key, required UserModel userModel});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
