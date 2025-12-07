@@ -5,9 +5,11 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: ">=3.8.1 <4.0.0"
+
 
 dependencies:
+
   flutter:
     sdk: flutter
 
@@ -15,14 +17,19 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Project dependencies
-  dio:
-  equatable:
-  flutter_bloc:
-  flutter_svg:
-  flutter_screenutil:
-  flutter_native_splash:
-  shared_preferences:
-  skeletonizer:
+  dio: ^5.9.0
+  equatable: ^2.0.5
+  flutter_bloc: ^9.1.1
+  flutter_svg: ^2.1.1
+  flutter_screenutil: ^5.9.3
+  flutter_native_splash: ^2.3.2
+  shared_preferences: ^2.2.0
+  skeletonizer: ^1.0.3
+
+    # Firebase
+  firebase_core: ^2.30.0
+  cloud_firestore: ^4.15.0
+
 
 dev_dependencies:
   flutter_test:

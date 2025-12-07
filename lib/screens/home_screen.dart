@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core/constants/color_theme.dart';
+import '../firestore_service.dart';
 import '../logic/models/doctor.dart';
 import '../widgets/doctor_card_widget.dart';
 import '../screens/search_screen.dart';
 
 
 class HomeScreen extends StatelessWidget {
-  final List<Doctor> doctors;
-  const HomeScreen({super.key, required this.doctors});
+    const HomeScreen({super.key});
 
-  @override
+
+
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.myWhite,
@@ -32,13 +35,15 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchScreen(doctors: doctors),
+                  builder: (context) => SearchScreen(),
                 ),
               );
             },
           ),
         ],
       ),
+
+
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -168,15 +173,30 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 15.h),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: doctors.length,
-                itemBuilder: (context, index) {
-                  final doctor = doctors[index];
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 10.h),
-                    child: DoctorCardWidget(doctor: doctor),
+              StreamBuilder(
+                stream: FirestoreService().getDoctors(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text("No doctors found"));
+                  }
+
+                  final doctors = snapshot.data!;
+
+                  return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: doctors.length,
+                    itemBuilder: (context, index) {
+                      final doctor = doctors[index];
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: DoctorCardWidget(doctor: doctor),
+                      );
+                    },
                   );
                 },
               ),
