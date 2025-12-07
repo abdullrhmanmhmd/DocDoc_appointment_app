@@ -12,6 +12,8 @@ dependencies:
 
   flutter:
     sdk: flutter
+  image_picker: ^1.1.2
+
 
   # iOS style icons
   cupertino_icons: ^1.0.8
