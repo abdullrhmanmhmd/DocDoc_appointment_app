@@ -32,6 +32,9 @@ class AuthRepo {
       throw ApiExceptions.handleError(e);
     }
   }
+
+  
+
   ///get profile
   Future<UserModel?> getProfile() async {
     try {

@@ -12,7 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class BottomNavigationWidget extends StatefulWidget {
   // final UserModel userModel;
 
-  const BottomNavigationWidget({super.key, required UserModel userModel});
+  const BottomNavigationWidget({super.key});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();

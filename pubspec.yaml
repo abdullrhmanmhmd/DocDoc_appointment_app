@@ -25,6 +25,8 @@ dependencies:
   flutter_native_splash:
   shared_preferences:
   skeletonizer:
+  firebase_auth:
+  firebase_core:
 
 dev_dependencies:
   flutter_test:

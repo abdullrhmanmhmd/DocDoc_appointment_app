@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null && user.token != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => BottomNavigationWidget(userModel: user ,)),
+          MaterialPageRoute(builder: (context) => BottomNavigationWidget()),
         );
       }
     } catch (e) {
