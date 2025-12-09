@@ -1,6 +1,9 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
+import 'package:doc_app_sw/widgets/bottom_navigation.dart';
+import 'package:doc_app_sw/widgets/custom_snack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,19 +11,55 @@ class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignUpScreen> {
-
+class _SignUpScreenState extends State<SignUpScreen> {
   bool isObscure = true;
+  bool isLoading = false;
 
-  final formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
+  signup() async {
+    print('Email: ${emailController.text}');
+    print('Name: ${nameController.text}');
+
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text,
+          );
+
+      await userCredential.user?.updateDisplayName(nameController.text.trim());
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigationWidget()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(customSnack("The account already exists for that email."));
+      } else if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(customSnack('The password provided is too weak.'));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +111,12 @@ class _SignInScreenState extends State<SignUpScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
                           }
+                          if (!value.contains('@')) {
+                            return 'Please enter a valid email';
+                          }
                           return null;
                         },
                       ),
-
                       SizedBox(height: 18.h),
                       AppTextFormField(
                         controller: passwordController,
@@ -84,6 +125,10 @@ class _SignInScreenState extends State<SignUpScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
                           }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          return null;
                         },
                         isPassword: isObscure,
                         suffixIcon: GestureDetector(
@@ -99,54 +144,25 @@ class _SignInScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 18.h),
-                      AppTextFormField(
-                        isPassword: isObscure,
-                        hintText: 'Confirm Password',
-                        controller: confirmPasswordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please Confirm your password';
-                          }
-                          return null;
-                        },
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
-                          },
-                          child: Icon(
-                            isObscure ? Icons.visibility_off : Icons.visibility,
-                            color: MyColors.myGrey,
-                            size: 20.sp,
-                          ),
+                      SizedBox(height: 22.h),
+
+                      isLoading
+                          ? CircularProgressIndicator(
+                              color: MyColors.myBlue,
+                              strokeWidth: 2,
+                              backgroundColor: MyColors.myWhite,
+                            )
+                          : AppTextButton(
+                        buttonText: 'Create Account',
+                        textStyle: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700,
+                          color: MyColors.myWhite,
                         ),
+                        onPressed: () {
+                                signup();
+                              },
                       ),
-
-                      SizedBox(height: 18.h),
-                      AppTextFormField(
-                        hintText: 'Phone',
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your phone number';
-                          }
-                          return null;
-                        },
-                        controller: phoneController,
-                      ),
-
-                      SizedBox(height: 30.h),
-
-                      AppTextButton(
-                              buttonText: 'Create Account',
-                              textStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700,
-                                color: MyColors.myWhite,
-                              ), onPressed: () {  },
-                            
-                            ),
                     ],
                   ),
                 ),
@@ -156,6 +172,13 @@ class _SignInScreenState extends State<SignUpScreen> {
         ),
       ),
     );
-    ;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
