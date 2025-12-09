@@ -1,4 +1,5 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
+import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
 import 'package:doc_app_sw/widgets/bottom_navigation.dart';
@@ -23,22 +24,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
+  final AuthRepo authRepo = AuthRepo();
 
   signup() async {
-    print('Email: ${emailController.text}');
-    print('Name: ${nameController.text}');
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
 
     setState(() {
       isLoading = true;
     });
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text,
-          );
 
-      await userCredential.user?.updateDisplayName(nameController.text.trim());
+    try {
+      await authRepo.signup(
+        nameController.text,
+        emailController.text,
+        passwordController.text,
+      );
 
       if (mounted) {
         Navigator.pushReplacement(
@@ -48,10 +50,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(customSnack("The account already exists for that email."));
+        ScaffoldMessenger.of(context).showSnackBar(
+          customSnack("The account already exists for that email."),
+        );
       } else if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(customSnack('The password provided is too weak.'));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(customSnack('The password provided is too weak.'));
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(customSnack(e.message ?? "An error occurred"));
       }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(customSnack(e.toString()));
     } finally {
       if (mounted) {
         setState(() {
@@ -145,7 +157,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       SizedBox(height: 22.h),
-
                       isLoading
                           ? CircularProgressIndicator(
                               color: MyColors.myBlue,
@@ -153,16 +164,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               backgroundColor: MyColors.myWhite,
                             )
                           : AppTextButton(
-                        buttonText: 'Create Account',
-                        textStyle: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                          color: MyColors.myWhite,
-                        ),
-                        onPressed: () {
+                              buttonText: 'Create Account',
+                              textStyle: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700,
+                                color: MyColors.myWhite,
+                              ),
+                              onPressed: () {
                                 signup();
                               },
-                      ),
+                            ),
                     ],
                   ),
                 ),

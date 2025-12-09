@@ -4,12 +4,12 @@ import 'package:doc_app_sw/core/network/api_exceptions.dart';
 import 'package:doc_app_sw/core/network/api_services.dart';
 import 'package:doc_app_sw/core/utils/pref_helper.dart';
 import 'package:doc_app_sw/logic/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepo {
   final ApiServices apiServices = ApiServices();
   UserModel _currentUser = UserModel();
   UserModel get currentUser => _currentUser;
-
 
   ///login
   Future<UserModel?> login(String email, String password) async {
@@ -33,7 +33,16 @@ class AuthRepo {
     }
   }
 
-  
+  ///signup
+  Future<void> signup(String name, String email, String password) async {
+    UserCredential userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+          email: email.trim(),
+          password: password,
+        );
+
+    await userCredential.user?.updateDisplayName(name.trim());
+  }
 
   ///get profile
   Future<UserModel?> getProfile() async {
@@ -52,5 +61,4 @@ class AuthRepo {
       throw ApiError(massage: e.toString());
     }
   }
-  
-}
+} 
