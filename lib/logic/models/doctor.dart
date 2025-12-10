@@ -8,6 +8,7 @@ class Doctor {
   final String hospital;
   final String contact;
 
+
   Doctor({
     required this.id,
     required this.name,
@@ -17,7 +18,10 @@ class Doctor {
     required this.biography,
     required this.hospital,
     required this.contact,
+
   });
+
+
 
   factory Doctor.fromFirestore(Map<String, dynamic> data, String id) {
     return Doctor(
@@ -30,5 +34,7 @@ class Doctor {
       hospital: data['hospital'] ?? '',
       contact: data['contact'] ?? '',
     );
+
   }
+
 }
