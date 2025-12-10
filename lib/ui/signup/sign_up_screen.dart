@@ -1,5 +1,7 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
+import 'package:doc_app_sw/ui/signup/widgets/all_ready_have_an_acount.dart';
+import 'package:doc_app_sw/ui/signup/widgets/signin_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
 import 'package:doc_app_sw/widgets/bottom_navigation.dart';
@@ -174,6 +176,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 signup();
                               },
                             ),
+                      SizedBox(height: 24.h),
+                      SigninTermsAndConditionsText(),
+
+                      SizedBox(height: 40.h),
+                      AllReadyHaveAnAccount(),
                     ],
                   ),
                 ),
