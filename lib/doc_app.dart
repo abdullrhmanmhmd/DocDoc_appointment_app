@@ -17,9 +17,11 @@ class DocApp extends StatelessWidget {
   const DocApp({super.key});
 
   @override
+
   Widget build(BuildContext context) {
     final List<Doctor> doctors = [
       Doctor(
+        id: '1',
         name: 'Dr. Sarah Ahmed',
         specialty: 'Cardiologist',
         rating: 4.8,
@@ -30,7 +32,9 @@ class DocApp extends StatelessWidget {
         contact: '+20 123 456 789',
       ),
 
-    Doctor(
+
+      Doctor(
+      id: '1',
     name: 'Dr. Mohammed Ali',
     specialty: 'Neurologist',
     rating: 4.6,
@@ -41,7 +45,9 @@ class DocApp extends StatelessWidget {
     contact: '+20 987 654 321',
     ),
 
-    Doctor(
+
+      Doctor(
+      id: '1',
     name: 'Dr. Mariam Hassan',
     specialty: 'Pediatrician',
     rating: 4.9,
@@ -53,6 +59,7 @@ class DocApp extends StatelessWidget {
     ),
 
     ];
+
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
