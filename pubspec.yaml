@@ -27,6 +27,7 @@ dependencies:
   skeletonizer:
   firebase_auth:
   firebase_core:
+  cloud_firestore:
 
 dev_dependencies:
   flutter_test:

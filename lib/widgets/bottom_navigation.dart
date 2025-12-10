@@ -29,7 +29,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     pageController = PageController(initialPage: currentScreen);
 
     screens = [
-      HomeScreen(doctors: [],),
+      HomeScreen(),
       const SearchScreen(doctors: [],),
        MyAppointmentsScreen(),
        ProfileScreen(),
