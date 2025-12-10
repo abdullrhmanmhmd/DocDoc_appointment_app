@@ -9,6 +9,7 @@ class Doctor {
   final String contact;
 
 
+
   Doctor({
     required this.id,
     required this.name,
@@ -20,6 +21,7 @@ class Doctor {
     required this.contact,
 
   });
+
 
 
 
