@@ -30,7 +30,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
     screens = [
       HomeScreen(),
-      const SearchScreen(doctors: [],),
+       SearchScreen(),
        MyAppointmentsScreen(),
        ProfileScreen(),
     ];
