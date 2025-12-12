@@ -70,7 +70,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        home:SignUpScreen(),
+        home: LoginScreen(),
       ),
     );
   }
