@@ -1,11 +1,8 @@
-
-import 'package:doc_app_sw/color_theme.dart';
-import 'package:flutter/gestures.dart';
+import 'package:doc_app_sw/core/constants/color_theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // make sure you import your SignUpScreen file
-
 
 class DontHaveAccountText extends StatelessWidget {
   const DontHaveAccountText({super.key});
@@ -24,8 +21,7 @@ class DontHaveAccountText extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: (){
-
+          onTap: () {
             // Navigator.of(context).pushReplacement(
             //   MaterialPageRoute(
             //     builder: (context) =>  SignUpScreen(),
