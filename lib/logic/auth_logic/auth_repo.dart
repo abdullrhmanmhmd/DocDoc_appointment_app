@@ -11,28 +11,6 @@ class AuthRepo {
   UserModel _currentUser = UserModel();
   UserModel get currentUser => _currentUser;
 
-  ///login
-  Future<UserModel?> login(String email, String password) async {
-    try {
-      final response = await apiServices.post('auth/login', {
-        'email': email,
-        'password': password,
-      });
-      if (response is ApiError) {
-        throw response;
-      }
-
-      final user = UserModel.fromJson(response['data']);
-      if (user.token != null) {
-        await PrefHelper.saveToken(user.token!);
-      }
-      _currentUser = user;
-      return user;
-    } on DioException catch (e) {
-      throw ApiExceptions.handleError(e);
-    }
-  }
-
   ///signup
   Future<void> signup(String name, String email, String password) async {
     UserCredential userCredential = await FirebaseAuth.instance
@@ -42,6 +20,14 @@ class AuthRepo {
         );
 
     await userCredential.user?.updateDisplayName(name.trim());
+  }
+
+  ///login
+  Future<void> login(String email, String password) async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.trim(),
+      password: password.trim(),
+    );
   }
 
   ///get profile
@@ -61,4 +47,4 @@ class AuthRepo {
       throw ApiError(massage: e.toString());
     }
   }
-} 
+}
