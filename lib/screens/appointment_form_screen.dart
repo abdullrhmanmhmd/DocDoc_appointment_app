@@ -4,7 +4,7 @@ import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../logic/models/appointment.dart';
 import '../widgets/app_text_button.dart';
-import '../logic/appointment_logic/appointment_service.dart';
+import '../logic/appointment_logic/appointment_repository.dart';
 import 'appointment_confirmation_screen.dart';
 
 class AppointmentFormScreen extends StatefulWidget {
@@ -21,7 +21,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   DateTime? _selectedDate;
   String? _selectedTime;
   final TextEditingController _notesController = TextEditingController();
-  final AppointmentService _appointmentService = AppointmentService();
+  final AppointmentRepository _appointmentRepository = AppointmentRepository();
+  bool _isSubmitting = false;
   final List<String> _availableTimes = [
     '09:00 AM',
     '10:00 AM',
@@ -102,28 +103,53 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       return;
     }
 
-    final appointment = Appointment(
-      doctor: _selectedDoctor!,
-      date: _selectedDate!,
-      time: _selectedTime!,
-      notes: _notesController.text.trim().isEmpty
-          ? null
-          : _notesController.text.trim(),
-      status: AppointmentStatus.upcoming,
-      createdAt: DateTime.now(),
-    );
-
-    // Save appointment before navigating
-    await _appointmentService.saveAppointment(appointment);
-
-    if (mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              AppointmentConfirmationScreen(appointment: appointment),
+    // Check if doctor has an ID for API call
+    if (_selectedDoctor!.id == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selected doctor is not available for booking'),
+          backgroundColor: Colors.red,
         ),
       );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      // Create appointment via API
+      final appointment = await _appointmentRepository.createAppointment(
+        doctorId: _selectedDoctor!.id!,
+        date: _selectedDate!.toIso8601String().split('T')[0], // Format: YYYY-MM-DD
+        time: _selectedTime!,
+        notes: _notesController.text.trim().isEmpty
+            ? null
+            : _notesController.text.trim(),
+        appointmentType: 'in-person',
+      );
+
+      setState(() => _isSubmitting = false);
+
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AppointmentConfirmationScreen(appointment: appointment),
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() => _isSubmitting = false);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to book appointment: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -190,59 +216,59 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 ),
                 child: _selectedDoctor != null
                     ? Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30.r,
+                      backgroundImage: AssetImage(_selectedDoctor!.image),
+                    ),
+                    SizedBox(width: 16.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CircleAvatar(
-                            radius: 30.r,
-                            backgroundImage: AssetImage(_selectedDoctor!.image),
-                          ),
-                          SizedBox(width: 16.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _selectedDoctor!.name,
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: MyColors.myBlue,
-                                  ),
-                                ),
-                                SizedBox(height: 4.h),
-                                Text(
-                                  _selectedDoctor!.specialty,
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: MyColors.myGrey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Icon(
-                            Icons.check_circle,
-                            color: MyColors.myBlue,
-                            size: 24.sp,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          Icon(
-                            Icons.person_add,
-                            color: MyColors.myGrey,
-                            size: 24.sp,
-                          ),
-                          SizedBox(width: 12.w),
                           Text(
-                            'Tap to select a doctor',
+                            _selectedDoctor!.name,
                             style: TextStyle(
                               fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors.myBlue,
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            _selectedDoctor!.specialty,
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               color: MyColors.myGrey,
                             ),
                           ),
                         ],
                       ),
+                    ),
+                    Icon(
+                      Icons.check_circle,
+                      color: MyColors.myBlue,
+                      size: 24.sp,
+                    ),
+                  ],
+                )
+                    : Row(
+                  children: [
+                    Icon(
+                      Icons.person_add,
+                      color: MyColors.myGrey,
+                      size: 24.sp,
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      'Tap to select a doctor',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: MyColors.myGrey,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 30.h),
@@ -398,14 +424,14 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
 
             // Submit Button
             AppTextButton(
-              buttonText: 'Confirm Appointment',
+              buttonText: _isSubmitting ? 'Booking...' : 'Confirm Appointment',
               textStyle: TextStyle(
                 color: Colors.white,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
-              onPressed: _submitAppointment,
-              backgroundColor: MyColors.myBlue,
+              onPressed: _isSubmitting ? () {} : _submitAppointment,
+              backgroundColor: _isSubmitting ? MyColors.myGrey : MyColors.myBlue,
               borderRadius: 16.r,
               buttonHeight: 56.h,
             ),
