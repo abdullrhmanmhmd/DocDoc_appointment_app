@@ -1,4 +1,5 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
+import 'package:doc_app_sw/ui/signup/sign_up_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,11 +23,11 @@ class DontHaveAccountText extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            // Navigator.of(context).pushReplacement(
-            //   MaterialPageRoute(
-            //     builder: (context) =>  SignUpScreen(),
-            //   ),
-            // );
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) =>  SignUpScreen(),
+              ),
+            );
           },
           child: Text(
             ' Sign In',

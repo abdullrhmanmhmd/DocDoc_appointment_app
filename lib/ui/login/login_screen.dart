@@ -2,6 +2,7 @@ import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/core/network/api_error.dart';
 import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
 import 'package:doc_app_sw/logic/models/user_model.dart';
+import 'package:doc_app_sw/ui/forgot_password/forgot_password_screen.dart';
 import 'package:doc_app_sw/ui/login/widgets/dont_have_account_text.dart';
 import 'package:doc_app_sw/ui/login/widgets/login_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
@@ -26,34 +27,33 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isObscure = true;
   bool isLoading = false;
 
-
- login() async {
-  try {
-    setState(() {
-      isLoading = true;
-    });
-    await AuthRepo().login(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const BottomNavigationWidget()),
-    );
-  } on FirebaseAuthException catch (e) {
-    String errorMessage = 'An error occurred. Please try again.';
-    if (e.code == 'user-not-found') {
-      errorMessage = 'No user found for that email.';
-    } else if (e.code == 'wrong-password') {
-      errorMessage = 'Wrong password provided for that user.';
+  login() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      await AuthRepo().login(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BottomNavigationWidget()),
+      );
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred. Please try again.';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided for that user.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(customSnack(errorMessage));
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-    ScaffoldMessenger.of(context).showSnackBar(customSnack(errorMessage));
-  } finally {
-    setState(() {
-      isLoading = false;
-    });
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -122,12 +122,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 22.h),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w400,
-                            color: MyColors.myBlue,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: MyColors.myBlue,
+                            ),
                           ),
                         ),
                       ),
