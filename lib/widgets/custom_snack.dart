@@ -12,7 +12,7 @@ SnackBar customSnack(
     clipBehavior: Clip.none,
     backgroundColor: backgroundColor ?? Colors.red,
     behavior: SnackBarBehavior.floating,
-    margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 50.h),
+    margin: EdgeInsets.symmetric(horizontal: 17.w, vertical: 50.h),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.sp)),
     content: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,20 +23,16 @@ SnackBar customSnack(
           size: 20.sp,
         ),
         SizedBox(width: 10.w),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Text(
-              message,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: MyColors.myWhite,
-                height: 1.3,
-              ),
-              maxLines: null,
-              softWrap: true,
-            ),
+        Text(
+          message,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w400,
+            color: MyColors.myWhite,
+            height: 1.3,
           ),
+          maxLines: null,
+          softWrap: true,
         ),
       ],
     ),

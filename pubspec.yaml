@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^1.1.2
+
 
   # iOS style icons
   cupertino_icons: ^1.0.8
@@ -23,6 +25,9 @@ dependencies:
   flutter_native_splash:
   shared_preferences:
   skeletonizer:
+  firebase_auth:
+  firebase_core:
+  cloud_firestore:
 
 dev_dependencies:
   flutter_test:

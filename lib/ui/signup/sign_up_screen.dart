@@ -1,9 +1,7 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
-import 'package:doc_app_sw/core/network/api_error.dart';
 import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
-import 'package:doc_app_sw/logic/models/user_model.dart';
-import 'package:doc_app_sw/ui/login/widgets/dont_have_account_text.dart';
-import 'package:doc_app_sw/ui/login/widgets/login_terms_and_conditions_text.dart';
+import 'package:doc_app_sw/ui/signup/widgets/all_ready_have_an_acount.dart';
+import 'package:doc_app_sw/ui/signup/widgets/signin_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
 import 'package:doc_app_sw/widgets/bottom_navigation.dart';
@@ -12,48 +10,70 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+class _SignUpScreenState extends State<SignUpScreen> {
   bool isObscure = true;
   bool isLoading = false;
 
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
- login() async {
-  try {
+  final formKey = GlobalKey<FormState>();
+  final AuthRepo authRepo = AuthRepo();
+
+  signup() async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });
-    await AuthRepo().login(
-      emailController.text.trim(),
-      passwordController.text.trim(),
-    );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const BottomNavigationWidget()),
-    );
-  } on FirebaseAuthException catch (e) {
-    String errorMessage = 'An error occurred. Please try again.';
-    if (e.code == 'user-not-found') {
-      errorMessage = 'No user found for that email.';
-    } else if (e.code == 'wrong-password') {
-      errorMessage = 'Wrong password provided for that user.';
+
+    try {
+      await authRepo.signup(
+        nameController.text,
+        emailController.text,
+        passwordController.text,
+      );
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigationWidget()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          customSnack("The account already exists for that email."),
+        );
+      } else if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(customSnack('The password provided is too weak.'));
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(customSnack(e.message ?? "An error occurred"));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(customSnack(e.toString()));
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
-    ScaffoldMessenger.of(context).showSnackBar(customSnack(errorMessage));
-  } finally {
-    setState(() {
-      isLoading = false;
-    });
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Welcome Back',
+                  'Create Account',
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.w700,
@@ -75,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  "We're excited to have you back, can't wait to see what you've been up to since you last\nlogged in.",
+                  "Sign up now and start exploring all that our app has to offer. We're excited to welcome\nyou to our community!",
                   style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w400,
@@ -88,29 +108,48 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       AppTextFormField(
-                        hintText: 'Email',
-                        controller: emailController,
+                        hintText: 'Name',
+                        controller: nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
+                            return 'Please enter your name';
                           }
                           return null;
                         },
                       ),
                       SizedBox(height: 18.h),
                       AppTextFormField(
-                        hintText: 'Password',
+                        hintText: 'Email',
+                        controller: emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          if (!value.contains('@')) {
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 18.h),
+                      AppTextFormField(
                         controller: passwordController,
-                        isPassword: isObscure,
+                        hintText: 'Password',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
                           }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
                           return null;
                         },
+                        isPassword: isObscure,
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            setState(() => isObscure = !isObscure);
+                            setState(() {
+                              isObscure = !isObscure;
+                            });
                           },
                           child: Icon(
                             isObscure ? Icons.visibility_off : Icons.visibility,
@@ -120,18 +159,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 22.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w400,
-                            color: MyColors.myBlue,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 40.h),
                       isLoading
                           ? CircularProgressIndicator(
                               color: MyColors.myBlue,
@@ -139,22 +166,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               backgroundColor: MyColors.myWhite,
                             )
                           : AppTextButton(
-                              buttonText: 'Login',
+                              buttonText: 'Create Account',
                               textStyle: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w700,
                                 color: MyColors.myWhite,
                               ),
                               onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  login();
-                                }
+                                signup();
                               },
                             ),
                       SizedBox(height: 24.h),
-                      const LoginTermsAndConditionsText(),
-                      SizedBox(height: 60.h),
-                      const DontHaveAccountText(),
+                      SigninTermsAndConditionsText(),
+
+                      SizedBox(height: 40.h),
+                      AllReadyHaveAnAccount(),
                     ],
                   ),
                 ),
@@ -164,5 +190,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }
