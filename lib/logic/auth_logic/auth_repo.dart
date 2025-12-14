@@ -47,4 +47,16 @@ class AuthRepo {
       throw ApiError(massage: e.toString());
     }
   }
+
+
 }
+
+///get profile
+Future<User?> getProfileData() async {
+  try {
+    return FirebaseAuth.instance.currentUser;
+  } catch (e) {
+    throw ApiError(massage: 'Failed to get user data.');
+  }
+}
+
