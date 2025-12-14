@@ -1,5 +1,4 @@
 import 'package:doc_app_sw/screens/doctor_details_screen.dart';
-import 'package:doc_app_sw/ui/forgot_password/forgot_password_screen.dart';
 import 'package:doc_app_sw/ui/onboarding/on_boarding_screen.dart';
 import 'package:doc_app_sw/ui/signup/sign_up_screen.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +70,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        home: ForgotPasswordScreen(),
+        home: LoginScreen(),
       ),
     );
   }
