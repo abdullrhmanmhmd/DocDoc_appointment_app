@@ -31,3 +31,56 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> updateProfile() async {
+    if (!formKey.currentState!.validate()) return;
+
+    setState(() => isLoading = true);
+
+    try {
+      final user = _auth.currentUser;
+
+      if (user == null) {
+        throw Exception('No authenticated user');
+      }
+
+      if (emailController.text.trim() != user.email) {
+        await user.updateEmail(emailController.text.trim());
+      }
+
+      if (passwordController.text.isNotEmpty) {
+        await user.updatePassword(passwordController.text.trim());
+      }
+
+      await _firestore.collection('users').doc(user.uid).update({
+        'name': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'phone': phoneController.text.trim(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      setState(() => isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        customSnack(
+          'Profile updated successfully',
+          backgroundColor: Colors.green,
+          icon: Icons.check_circle,
+        ),
+      );
+
+      Navigator.pop(context, true);
+    } on FirebaseAuthException catch (e) {
+      setState(() => isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        customSnack(e.message ?? 'Authentication error'),
+      );
+    } catch (e) {
+      setState(() => isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        customSnack('Something went wrong'),
+      );
+    }
+  }
