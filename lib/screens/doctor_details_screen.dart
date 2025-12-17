@@ -8,6 +8,7 @@ class DoctorDetailsScreen extends StatelessWidget {
 
   const DoctorDetailsScreen({super.key, required this.doctor});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +17,8 @@ class DoctorDetailsScreen extends StatelessWidget {
         title: Text(doctor.name, style: const TextStyle(color: Colors.white)),
         backgroundColor: MyColors.myBlue,
       ),
+
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -24,7 +27,10 @@ class DoctorDetailsScreen extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 radius: 70,
-                backgroundImage: AssetImage(doctor.image),
+                backgroundColor: Colors.grey[200],
+                backgroundImage: doctor.image.isNotEmpty
+                    ? NetworkImage(doctor.image)
+                    :const AssetImage('assets/images/doctor1.png') as ImageProvider,
               ),
             ),
             const SizedBox(height: 20),
@@ -60,6 +66,7 @@ class DoctorDetailsScreen extends StatelessWidget {
               ),
             ),
 
+
             const SizedBox(height: 10),
             Text(
               doctor.biography,
@@ -76,6 +83,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                 color: MyColors.myBlue,
               ),
             ),
+
 
             const SizedBox(height: 10),
             Text(doctor.hospital, style: const TextStyle(fontSize: 16)),
@@ -95,6 +103,7 @@ class DoctorDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
@@ -106,6 +115,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                     ),
                   );
                 },
+
 
                 icon: const Icon(Icons.calendar_today),
                 label: const Text('Book Appointment'),
