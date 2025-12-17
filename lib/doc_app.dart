@@ -71,7 +71,7 @@ class DocApp extends StatelessWidget {
           primaryColor: MyColors.myBlue,
           scaffoldBackgroundColor: MyColors.myWhite,
         ),
-        home: ForgotPasswordScreen(),
+        home: OnboardingScreen(),
       ),
     );
   }
