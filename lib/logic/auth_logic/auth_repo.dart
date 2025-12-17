@@ -7,7 +7,6 @@ import 'package:doc_app_sw/logic/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepo {
-  final ApiServices apiServices = ApiServices();
   UserModel _currentUser = UserModel();
   UserModel get currentUser => _currentUser;
 
@@ -30,13 +29,13 @@ class AuthRepo {
     );
   }
 
-
-///get profile
-Future<User?> getProfileData() async {
-  try {
-    return FirebaseAuth.instance.currentUser;
-  } catch (e) {
-    throw ApiError(massage: 'Failed to get user data.');
+  ///get profile
+  Future<User?> getProfile() async {
+    try {
+      return FirebaseAuth.instance.currentUser;
+    } catch (e) {
+      throw ApiError(massage: 'Failed to get user data.');
+    }
   }
-}
 
+}

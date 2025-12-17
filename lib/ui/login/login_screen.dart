@@ -41,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => const BottomNavigationWidget()),
       );
     } on FirebaseAuthException catch (e) {
+      print("😂😂😂😂😂😂Error during login: $e");
       String errorMessage = 'An error occurred. Please try again.';
       if (e.code == 'user-not-found') {
         errorMessage = 'No user found for that email.';
