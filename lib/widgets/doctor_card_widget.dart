@@ -26,9 +26,12 @@ class DoctorCardWidget extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 28,
-            backgroundImage: doctor.image.startsWith('http')
+            backgroundColor: Colors.grey.shade200,
+            backgroundImage: doctor.image.isNotEmpty
                 ? NetworkImage(doctor.image)
-                : AssetImage(doctor.image) as ImageProvider,
+                : const AssetImage(
+              'assets/images/doctor1.png',
+            ) as ImageProvider,
 
 
           ),

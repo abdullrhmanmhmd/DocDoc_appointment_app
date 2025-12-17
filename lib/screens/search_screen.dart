@@ -27,6 +27,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
 
 
+
     return Scaffold(
       backgroundColor: MyColors.myWhite,
       appBar: AppBar(
@@ -35,10 +36,13 @@ class _SearchScreenState extends State<SearchScreen> {
         elevation: 0,
       ),
 
+
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+
 
             TextField(
               decoration: InputDecoration(
@@ -77,17 +81,24 @@ class _SearchScreenState extends State<SearchScreen> {
                       }
 
 
-                      final filteredDoctors = snapshot.data!.where((doctor) {
-                        return doctor.name.toLowerCase().contains(
-                            query.toLowerCase()) ||
-                            doctor.specialty.toLowerCase().contains(
-                                query.toLowerCase());
+
+                      final filteredDoctors = query.isEmpty
+                          ? []
+                          : snapshot.data!.where((doctor) {
+                        return doctor.name.toLowerCase().contains(query.toLowerCase()) ||
+                            doctor.specialty.toLowerCase().contains(query.toLowerCase());
                       }).toList();
 
+
+
                       if (filteredDoctors.isEmpty) {
-                        return const Center(
-                            child: Text("No doctors match your search."));
+                        return Center(
+                          child: query.isEmpty
+                              ? const Text("Start typing to search for doctors")
+                              : const Text("No doctors match your search."),
+                        );
                       }
+
 
                       return ListView.builder(
                         itemCount: filteredDoctors.length,
