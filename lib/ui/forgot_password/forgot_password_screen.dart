@@ -1,6 +1,9 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
+import 'package:doc_app_sw/ui/login/login_screen.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
+import 'package:doc_app_sw/widgets/custom_snack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,6 +18,43 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
+  String email = '';
+
+  resetPassword() async {
+    setState(() => isLoading = true);
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailController.text.trim(),
+      );
+      emailController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        customSnack(
+          'Reset password email sent successfully!',
+          backgroundColor: Colors.green,
+          icon: Icons.check_circle,
+        ),
+      );
+      
+      Future.delayed(Duration(seconds: 2), () {
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      });
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'An error occurred. Please try again.';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'invalid-email') {
+        errorMessage = 'The email address is not valid.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(customSnack(errorMessage));
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           return null;
                         },
                       ),
-                    
+
                       SizedBox(height: 400.h),
                       isLoading
                           ? CircularProgressIndicator(
@@ -74,10 +114,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               ),
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
+                                  resetPassword();
                                 }
                               },
                             ),
-                      
                     ],
                   ),
                 ),
@@ -88,4 +128,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
+
+
 }
