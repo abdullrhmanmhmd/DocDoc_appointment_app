@@ -20,16 +20,20 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final formKey = GlobalKey<FormState>();
 
-  bool isObscure = true;
+  bool isObscure = true; // Password visibility toggle
   bool isLoading = false;
 
+
+  // Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-  TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
+  /// Update user profile
   Future<void> updateProfile() async {
     if (!formKey.currentState!.validate()) return;
 
@@ -37,10 +41,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
     try {
       final user = _auth.currentUser;
+      if (user == null) throw Exception('No authenticated user');
 
-      if (user == null) {
-        throw Exception('No authenticated user');
-      }
+
+
 
       // Update display name
       if (nameController.text.trim().isNotEmpty) {
@@ -53,6 +57,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       }
 
       await user.reload();
+
 
       setState(() => isLoading = false);
 
@@ -68,12 +73,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     } on FirebaseAuthException catch (e) {
       setState(() => isLoading = false);
 
+      if (e.code == 'requires-recent-login') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          customSnack('Please log out and log in again to change email or password.'),
+        );
+        return;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         customSnack(e.message ?? 'Authentication error'),
       );
     } catch (e) {
       setState(() => isLoading = false);
-
       ScaffoldMessenger.of(context).showSnackBar(
         customSnack('Something went wrong'),
       );
@@ -84,14 +95,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       displacement: 60,
-      onRefresh: () async {
-        FocusScope.of(context).unfocus();
-      },
+      onRefresh: () async => FocusScope.of(context).unfocus(),
       color: MyColors.myBlue,
       backgroundColor: Colors.transparent,
       child: Scaffold(
         backgroundColor: MyColors.myWhite,
-
         appBar: AppBar(
           backgroundColor: MyColors.myWhite,
           elevation: 0,
@@ -126,6 +134,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             enabled: false,
             child: Column(
               children: [
+                // Avatar
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
                   child: Container(
@@ -144,6 +153,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     ),
                   ),
                 ),
+                // Form
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 30.h),
@@ -155,10 +165,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           hintText: 'Name',
                           controller: nameController,
                           validator: (value) =>
-                          value!.isEmpty ? 'Please enter your name' : null,
+                          value == null || value.isEmpty ? 'Please enter your name' : null,
                         ),
-                        SizedBox(height: 18.h),
 
+
+                        SizedBox(height: 18.h),
                         AppTextFormField(
                           hintText: 'New Password',
                           controller: passwordController,
@@ -166,19 +177,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           validator: (value) =>
                           value!.isEmpty ? 'Please enter your new password' : null,
                           suffixIcon: GestureDetector(
-                            onTap: () =>
-                                setState(() => isObscure = !isObscure),
+                            onTap: () => setState(() => isObscure = !isObscure),
                             child: Icon(
-                              isObscure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
+                              isObscure ? Icons.visibility_off : Icons.visibility,
                               color: MyColors.myGrey,
                               size: 20.sp,
                             ),
                           ),
                         ),
-                        SizedBox(height: 18.h),
 
+
+                        SizedBox(height: 18.h),
                         AppTextFormField(
                           hintText: 'Confirm New Password',
                           controller: confirmPasswordController,
@@ -192,20 +201,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             }
                             return null;
                           },
+
+
                           suffixIcon: GestureDetector(
-                            onTap: () =>
-                                setState(() => isObscure = !isObscure),
+                            onTap: () => setState(() => isObscure = !isObscure),
                             child: Icon(
-                              isObscure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
+                              isObscure ? Icons.visibility_off : Icons.visibility,
                               color: MyColors.myGrey,
                               size: 20.sp,
                             ),
                           ),
                         ),
-                        SizedBox(height: 30.h),
 
+
+                        SizedBox(height: 30.h),
                         isLoading
                             ? CircularProgressIndicator(
                           color: MyColors.myBlue,

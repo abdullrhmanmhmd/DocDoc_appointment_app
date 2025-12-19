@@ -1,8 +1,8 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/core/network/api_error.dart';
 import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
-import 'package:doc_app_sw/logic/models/user_model.dart';
 import 'package:doc_app_sw/widgets/custom_snack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = false;
-  UserModel? userModel;
+  User? firebaseUser;
 
   final AuthRepo authRepo = AuthRepo();
 
@@ -32,21 +32,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final user = await authRepo.getProfile();
       setState(() {
-        userModel = user;
+        firebaseUser = user;
       });
     } catch (e) {
       String? error;
       if (e is ApiError) error = e.massage;
+      print("Error fetching profile data: $e");
       ScaffoldMessenger.of(context).showSnackBar(customSnack(error ?? 'Error'));
     }
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
-      enabled: userModel == null,
+      enabled: firebaseUser == null,
       child: Scaffold(
         backgroundColor: MyColors.myBlue,
         appBar: AppBar(
@@ -103,8 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Center(
                 child: Container(
-                  margin: EdgeInsets.only(top: 42.h,),
-
+                  margin: EdgeInsets.only(top: 42.h),
                   width: 130.w,
                   height: 130.h,
                   decoration: BoxDecoration(
@@ -112,23 +110,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: const Color.fromRGBO(230, 219, 255, 1.0),
                     border: Border.all(color: MyColors.myWhite, width: 6.w),
                   ),
-                  child: Icon(
-                    Icons.person,
-                    color: MyColors.myWhite,
-                    size: 80,
-                  ),
+                  child: Icon(Icons.person, color: MyColors.myWhite, size: 80),
                 ),
               ),
               Container(
                 width: double.infinity,
-
                 margin: EdgeInsets.only(top: 180.h, left: 24.w, right: 24.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                       child: Text(
-                userModel?.name ?? 'Loading..',
+                        firebaseUser?.displayName ?? 'Loading..',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -139,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 8.h),
                     Center(
                       child: Text(
-                        userModel?.email ?? 'Loading..',
+                        firebaseUser?.email ?? 'Loading..',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -180,13 +173,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ),
-
                               Container(
                                 height: 40.h,
                                 width: 2,
                                 color: MyColors.myLightGrey,
                               ),
-
                               Expanded(
                                 child: Center(
                                   child: Text(
@@ -209,15 +200,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 20.r,
-                          // backgroundColor: MyColors.myBlue,
                           child: SvgPicture.asset("assets/svgs/Icon (1).svg"),
                         ),
                         SizedBox(width: 16.w),
-                        Text("Personal Information",style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: MyColors.myBlack,
-                        ),)
+                        Text(
+                          "Personal Information",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: MyColors.myBlack,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 16.h),
@@ -227,19 +220,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: MyColors.myLightGrey,
                     ),
                     SizedBox(height: 16.h),
-                    Row(children: [
-                      CircleAvatar(
-                        radius: 20.r,
-                        // backgroundColor: MyColors.myBlue,
-                        child: SvgPicture.asset("assets/svgs/Icon (2).svg"),
-                      ),
-                      SizedBox(width: 16.w),
-                      Text("My Test & Diagnostic",style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: MyColors.myBlack,
-                      ),)
-                    ]),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20.r,
+                          child: SvgPicture.asset("assets/svgs/Icon (2).svg"),
+                        ),
+                        SizedBox(width: 16.w),
+                        Text(
+                          "My Test & Diagnostic",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: MyColors.myBlack,
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 16.h),
                     Container(
                       width: double.infinity,
@@ -247,29 +244,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: MyColors.myLightGrey,
                     ),
                     SizedBox(height: 16.h),
-                    Row(children: [
-                      CircleAvatar(
-                        radius: 20.r,
-                        // backgroundColor: MyColors.myBlue,
-                        child: SvgPicture.asset("assets/svgs/Icon (3).svg"),
-                      ),
-                      SizedBox(width: 16.w),
-                      Text("Payment",style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: MyColors.myBlack,
-                      ),)
-                    ]),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20.r,
+                          child: SvgPicture.asset("assets/svgs/Icon (3).svg"),
+                        ),
+                        SizedBox(width: 16.w),
+                        Text(
+                          "Payment",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: MyColors.myBlack,
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 29.h),
-                    // Container(
-                    //   width: double.infinity,
-                    //   height: 1,
-                    //   color: MyColors.myLightGrey,
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Edit Profile Button
                         Expanded(
                           child: Container(
                             height: 55.h,
@@ -283,9 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Colors.transparent,
                                 ),
                               ),
-                              onPressed: () async {
-
-                              },
+                              onPressed: () async {},
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -308,60 +301,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-
                         SizedBox(width: 12.w),
-
-                        // Log Out Button
                         Expanded(
                           child: isLoading
                               ? Center(
-                            child: CircularProgressIndicator(
-                              color: MyColors.myBlue,
-                              strokeWidth: 2,
-                              backgroundColor: MyColors.myWhite,
-                            ),
-                          )
+                                  child: CircularProgressIndicator(
+                                    color: MyColors.myBlue,
+                                    strokeWidth: 2,
+                                    backgroundColor: MyColors.myWhite,
+                                  ),
+                                )
                               : Container(
-                            height: 55.h,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: MyColors.myBlue,
-                                width: 0.8,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                16,
-                              ),
-                              color: MyColors.myWhite,
-                            ),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(
-                                  Colors.transparent,
-                                ),
-                              ),
-                              onPressed: (){},
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Log Out',
-                                    style: TextStyle(
+                                  height: 55.h,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
                                       color: MyColors.myBlue,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
+                                      width: 0.8,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: MyColors.myWhite,
+                                  ),
+                                  child: TextButton(
+                                    style: ButtonStyle(
+                                      overlayColor: MaterialStateProperty.all(
+                                        Colors.transparent,
+                                      ),
+                                    ),
+                                    onPressed: () {},
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Log Out',
+                                          style: TextStyle(
+                                            color: MyColors.myBlue,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Icon(
+                                          Icons.logout,
+                                          color: MyColors.myBlue,
+                                          size: 22,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  SizedBox(width: 8.w),
-                                  Icon(
-                                    Icons.logout,
-                                    color: MyColors.myBlue,
-                                    size: 22,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                ),
                         ),
                       ],
                     ),

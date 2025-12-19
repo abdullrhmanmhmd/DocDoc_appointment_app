@@ -1,16 +1,15 @@
-
-
-
 import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/core/network/api_error.dart';
 import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
 import 'package:doc_app_sw/logic/models/user_model.dart';
+import 'package:doc_app_sw/ui/forgot_password/forgot_password_screen.dart';
 import 'package:doc_app_sw/ui/login/widgets/dont_have_account_text.dart';
 import 'package:doc_app_sw/ui/login/widgets/login_terms_and_conditions_text.dart';
 import 'package:doc_app_sw/widgets/app_text_button.dart';
 import 'package:doc_app_sw/widgets/app_text_form_field.dart';
 import 'package:doc_app_sw/widgets/bottom_navigation.dart';
 import 'package:doc_app_sw/widgets/custom_snack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,40 +21,38 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  UserModel userModel = UserModel();
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isObscure = true;
   bool isLoading = false;
 
-  final AuthRepo authRepo = AuthRepo();
-
-  Future<void> login() async {
-    setState(() => isLoading = true);
+  login() async {
     try {
-      final user = await authRepo.login(
+      setState(() {
+        isLoading = true;
+      });
+      await AuthRepo().login(
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-
-      if (user != null && user.token != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => BottomNavigationWidget(userModel: user ,)),
-        );
-      }
-    } catch (e) {
-      String error = "Login not working";
-      if (e is ApiError) {
-        error = e.massage;
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        customSnack(error),
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BottomNavigationWidget()),
       );
+    } on FirebaseAuthException catch (e) {
+      print("😂😂😂😂😂😂Error during login: $e");
+      String errorMessage = 'An error occurred. Please try again.';
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided for that user.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(customSnack(errorMessage));
     } finally {
-      setState(() => isLoading = false);
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -126,37 +123,44 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 22.h),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w400,
-                            color: MyColors.myBlue,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: MyColors.myBlue,
+                            ),
                           ),
                         ),
                       ),
                       SizedBox(height: 40.h),
                       isLoading
                           ? CircularProgressIndicator(
-                        color: MyColors.myBlue,
-                        strokeWidth: 2,
-                        backgroundColor: MyColors.myWhite,
-                        
-                      )
+                              color: MyColors.myBlue,
+                              strokeWidth: 2,
+                              backgroundColor: MyColors.myWhite,
+                            )
                           : AppTextButton(
-                        buttonText: 'Login',
-                        textStyle: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                          color: MyColors.myWhite,
-                        ),
-                        onPressed: () {
-
-                          if (formKey.currentState!.validate()) {
-                            login();
-                          }
-                        },
-                      ),
+                              buttonText: 'Login',
+                              textStyle: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700,
+                                color: MyColors.myWhite,
+                              ),
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  login();
+                                }
+                              },
+                            ),
                       SizedBox(height: 24.h),
                       const LoginTermsAndConditionsText(),
                       SizedBox(height: 60.h),
