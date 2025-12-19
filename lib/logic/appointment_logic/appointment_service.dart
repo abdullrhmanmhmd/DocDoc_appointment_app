@@ -56,4 +56,28 @@ class AppointmentService {
     // Return appointment with generated ID
     return appointment.copyWith(id: docRef.id);
   }
+
+  /// Fetches a single appointment by its ID
+  ///
+  /// Used for appointment confirmation and details screens
+  /// Returns null if appointment not found
+  Future<Appointment?> getAppointmentById(String appointmentId) async {
+    if (appointmentId.isEmpty) {
+      throw ArgumentError('Appointment ID cannot be empty');
+    }
+
+    final docSnapshot = await _firestore
+        .collection(_appointmentsCollection)
+        .doc(appointmentId)
+        .get();
+
+    if (!docSnapshot.exists) {
+      return null;
+    }
+
+    return Appointment.fromJson(
+      docSnapshot.data() as Map<String, dynamic>,
+      docSnapshot.id,
+    );
+  }
 }
