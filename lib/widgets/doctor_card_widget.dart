@@ -29,8 +29,10 @@ class DoctorCardWidget extends StatelessWidget {
             backgroundColor: Colors.grey.shade200,
             backgroundImage: doctor.image.isNotEmpty
                 ? NetworkImage(doctor.image)
-                : const AssetImage(
-              'assets/images/doctor1.png',
+                : AssetImage(
+              doctor.image.isNotEmpty
+                  ? doctor.image
+                  : 'assets/images/doctor1.png',
             ) as ImageProvider,
 
 
