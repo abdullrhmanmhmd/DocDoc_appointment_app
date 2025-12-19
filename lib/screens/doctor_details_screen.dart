@@ -28,10 +28,11 @@ class DoctorDetailsScreen extends StatelessWidget {
               child: CircleAvatar(
                 radius: 70,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: doctor.image.startsWith('http')
-                    ? NetworkImage(doctor.image)
-                    : AssetImage(doctor.image) as ImageProvider,
-              ),
+          backgroundImage: doctor.image.isNotEmpty
+              ? NetworkImage(doctor.image)
+              : const AssetImage('assets/images/doctor1.png'),
+            ),
+
             ),
             const SizedBox(height: 20),
 
