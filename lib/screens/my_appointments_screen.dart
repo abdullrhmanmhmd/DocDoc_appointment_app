@@ -40,15 +40,28 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   }
 
   Future<void> _loadAppointments() async {
-    await _appointmentService.loadAppointments();
-    _updateAppointmentLists();
+    // TODO: Get actual userId from authentication service
+    // For now using a placeholder userId
+    const String userId = 'current_user_id';
+
+    try {
+      final upcoming = await _appointmentService.getUpcomingAppointments(
+        userId,
+      );
+      final past = await _appointmentService.getPastAppointments(userId);
+
+      setState(() {
+        _upcomingAppointments = upcoming;
+        _pastAppointments = past;
+      });
+    } catch (e) {
+      debugPrint('Error loading appointments: $e');
+      // Show error message if needed
+    }
   }
 
   void _updateAppointmentLists() {
-    setState(() {
-      _upcomingAppointments = _appointmentService.getUpcomingAppointments();
-      _pastAppointments = _appointmentService.getPastAppointments();
-    });
+    _loadAppointments();
   }
 
   void _cancelAppointment(Appointment appointment) async {
@@ -247,10 +260,15 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Doctor Image
+                // Doctor Avatar (placeholder icon since we don't have image reference)
                 CircleAvatar(
                   radius: 35.r,
-                  backgroundImage: AssetImage(appointment.doctor.image),
+                  backgroundColor: MyColors.myBlue.withOpacity(0.1),
+                  child: Icon(
+                    Icons.person,
+                    size: 35.sp,
+                    color: MyColors.myBlue,
+                  ),
                 ),
                 SizedBox(width: 16.w),
                 // Doctor Info
@@ -259,7 +277,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        appointment.doctor.name,
+                        appointment.doctorName,
                         style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
@@ -268,32 +286,11 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        appointment.doctor.specialty,
+                        'Doctor ID: ${appointment.doctorId}',
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 12.sp,
                           color: MyColors.myGrey,
                         ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.local_hospital,
-                            size: 16.sp,
-                            color: MyColors.myGrey,
-                          ),
-                          SizedBox(width: 4.w),
-                          Expanded(
-                            child: Text(
-                              appointment.doctor.hospital,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: MyColors.myGrey,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),

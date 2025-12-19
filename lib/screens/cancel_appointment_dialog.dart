@@ -91,7 +91,12 @@ class CancelAppointmentDialog extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 25.r,
-                        backgroundImage: AssetImage(appointment.doctor.image),
+                        backgroundColor: MyColors.myBlue.withOpacity(0.1),
+                        child: Icon(
+                          Icons.person,
+                          size: 25.sp,
+                          color: MyColors.myBlue,
+                        ),
                       ),
                       SizedBox(width: 12.w),
                       Expanded(
@@ -99,7 +104,7 @@ class CancelAppointmentDialog extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              appointment.doctor.name,
+                              appointment.doctorName,
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
@@ -107,7 +112,7 @@ class CancelAppointmentDialog extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              appointment.doctor.specialty,
+                              'ID: ${appointment.doctorId}',
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: MyColors.myGrey,
