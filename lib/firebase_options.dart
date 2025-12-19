@@ -45,51 +45,51 @@ class DefaultFirebaseOptions {
   // NOTE: Replace these with your actual Firebase project configuration
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD1RG7zhaDQ0CVp594ExPfc_UHeyaPZK9E',
-    appId: '1:412354226846:web:ca50e733018b7e575ae98f',
-    messagingSenderId: '412354226846',
-    projectId: 'doctor-app-48bd7',
-    authDomain: 'doctor-app-48bd7.firebaseapp.com',
-    storageBucket: 'doctor-app-48bd7.firebasestorage.app',
-    measurementId: 'G-MYGK61CDFN',
+    apiKey: 'AIzaSyAsfgy7yVP4I7Z4Y3Sg_7KR5YCFugl3emU',
+    appId: '1:289750308538:web:2e01ecad7780a177175483',
+    messagingSenderId: '289750308538',
+    projectId: 'docdoc-a6dd4',
+    authDomain: 'docdoc-a6dd4.firebaseapp.com',
+    storageBucket: 'docdoc-a6dd4.firebasestorage.app',
+    measurementId: 'G-6GKK4HN7N8',
   );
 
   // Run: flutterfire configure
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyChpO5VsH5m94SPdLvAhxIYXFWl4WG5SlM',
-    appId: '1:412354226846:android:a1d973b7426351745ae98f',
-    messagingSenderId: '412354226846',
-    projectId: 'doctor-app-48bd7',
-    storageBucket: 'doctor-app-48bd7.firebasestorage.app',
+    apiKey: 'AIzaSyDasbjjs2tjzVcAqQIeQphS-oblxvG4r8c',
+    appId: '1:289750308538:android:db1053d2c6efc084175483',
+    messagingSenderId: '289750308538',
+    projectId: 'docdoc-a6dd4',
+    storageBucket: 'docdoc-a6dd4.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDL0Ytv3ppnh8WCBI7xUwNBbAg4EqMKY_I',
-    appId: '1:412354226846:ios:d883c40e094886be5ae98f',
-    messagingSenderId: '412354226846',
-    projectId: 'doctor-app-48bd7',
-    storageBucket: 'doctor-app-48bd7.firebasestorage.app',
+    apiKey: 'AIzaSyB9R7n-QWMpXIaKgI6KASWp6qqAs9LhwGk',
+    appId: '1:289750308538:ios:4669b0845cc6e2e5175483',
+    messagingSenderId: '289750308538',
+    projectId: 'docdoc-a6dd4',
+    storageBucket: 'docdoc-a6dd4.firebasestorage.app',
     iosBundleId: 'com.example.docAppSw',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDL0Ytv3ppnh8WCBI7xUwNBbAg4EqMKY_I',
-    appId: '1:412354226846:ios:d883c40e094886be5ae98f',
-    messagingSenderId: '412354226846',
-    projectId: 'doctor-app-48bd7',
-    storageBucket: 'doctor-app-48bd7.firebasestorage.app',
+    apiKey: 'AIzaSyB9R7n-QWMpXIaKgI6KASWp6qqAs9LhwGk',
+    appId: '1:289750308538:ios:4669b0845cc6e2e5175483',
+    messagingSenderId: '289750308538',
+    projectId: 'docdoc-a6dd4',
+    storageBucket: 'docdoc-a6dd4.firebasestorage.app',
     iosBundleId: 'com.example.docAppSw',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyD1RG7zhaDQ0CVp594ExPfc_UHeyaPZK9E',
-    appId: '1:412354226846:web:a7f3456f9874f4365ae98f',
-    messagingSenderId: '412354226846',
-    projectId: 'doctor-app-48bd7',
-    authDomain: 'doctor-app-48bd7.firebaseapp.com',
-    storageBucket: 'doctor-app-48bd7.firebasestorage.app',
-    measurementId: 'G-GE64R903VL',
+    apiKey: 'AIzaSyAsfgy7yVP4I7Z4Y3Sg_7KR5YCFugl3emU',
+    appId: '1:289750308538:web:7f529b38ea2d05dc175483',
+    messagingSenderId: '289750308538',
+    projectId: 'docdoc-a6dd4',
+    authDomain: 'docdoc-a6dd4.firebaseapp.com',
+    storageBucket: 'docdoc-a6dd4.firebasestorage.app',
+    measurementId: 'G-PHRT7CSV71',
   );
 
 }

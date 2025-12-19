@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../logic/models/appointment.dart';
@@ -106,8 +107,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
     setState(() => _isSubmitting = true);
 
     try {
-      // TODO: Get actual userId from authentication service
-      const String userId = 'current_user_id';
+      // Get current user ID from Firebase Auth
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId == null) {
+        throw Exception('User not authenticated. Please log in first.');
+      }
 
       final appointment = await _appointmentService.createAppointment(
         userId: userId,
@@ -126,8 +131,10 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                AppointmentConfirmationScreen(appointment: appointment),
+            builder: (context) => AppointmentConfirmationScreen(
+              appointment: appointment,
+              doctor: _selectedDoctor!,
+            ),
           ),
         );
       }

@@ -5,8 +5,13 @@ import '../logic/models/appointment.dart';
 
 class CancelAppointmentDialog extends StatelessWidget {
   final Appointment appointment;
+  final String doctorName;
 
-  const CancelAppointmentDialog({super.key, required this.appointment});
+  const CancelAppointmentDialog({
+    super.key,
+    required this.appointment,
+    required this.doctorName,
+  });
 
   String _formatDate(DateTime date) {
     const months = [
@@ -91,11 +96,14 @@ class CancelAppointmentDialog extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 25.r,
-                        backgroundColor: MyColors.myBlue.withOpacity(0.1),
-                        child: Icon(
-                          Icons.person,
-                          size: 25.sp,
-                          color: MyColors.myBlue,
+                        backgroundColor: MyColors.myBlue,
+                        child: Text(
+                          doctorName[0].toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(width: 12.w),
@@ -104,7 +112,7 @@ class CancelAppointmentDialog extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              appointment.doctorName,
+                              doctorName,
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
@@ -112,7 +120,7 @@ class CancelAppointmentDialog extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'ID: ${appointment.doctorId}',
+                              'Doctor',
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: MyColors.myGrey,
