@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../core/constants/color_theme.dart';
 import '../logic/models/appointment.dart';
+import '../logic/models/doctor.dart';
 import '../logic/appointment_logic/appointment_service.dart';
 import 'cancel_appointment_dialog.dart';
 
@@ -18,6 +20,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   final AppointmentService _appointmentService = AppointmentService();
   List<Appointment> _upcomingAppointments = [];
   List<Appointment> _pastAppointments = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -40,34 +43,69 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
   }
 
   Future<void> _loadAppointments() async {
-    await _appointmentService.loadAppointments();
-    _updateAppointmentLists();
-  }
+    setState(() => _isLoading = true);
+    try {
+      // Get current user ID from Firebase Auth
+      final userId = FirebaseAuth.instance.currentUser?.uid;
 
-  void _updateAppointmentLists() {
-    setState(() {
-      _upcomingAppointments = _appointmentService.getUpcomingAppointments();
-      _pastAppointments = _appointmentService.getPastAppointments();
-    });
+      if (userId == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final upcoming = await _appointmentService.getUpcomingAppointments(
+        userId,
+      );
+      final past = await _appointmentService.getPastAppointments(userId);
+
+      setState(() {
+        _upcomingAppointments = upcoming;
+        _pastAppointments = past;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to load appointments: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   void _cancelAppointment(Appointment appointment) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => CancelAppointmentDialog(appointment: appointment),
+      builder: (context) => CancelAppointmentDialog(
+        appointment: appointment,
+        doctorName: appointment.doctorName,
+      ),
     );
 
     if (confirmed == true && appointment.id != null) {
-      await _appointmentService.cancelAppointment(appointment.id!);
-      _updateAppointmentLists();
+      try {
+        await _appointmentService.cancelAppointment(appointment.id!);
+        await _loadAppointments(); // Reload appointments from Firebase
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Appointment cancelled successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Appointment cancelled successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to cancel appointment: ${e.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }
@@ -80,7 +118,10 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
         centerTitle: true,
         backgroundColor: MyColors.myWhite,
         elevation: 0,
-        leading: SizedBox.shrink(),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: MyColors.myBlue),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
           'My Appointments',
           style: TextStyle(
@@ -247,10 +288,18 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Doctor Image
+                // Doctor Image - Using placeholder since we only have name
                 CircleAvatar(
                   radius: 35.r,
-                  backgroundImage: AssetImage(appointment.doctor.image),
+                  backgroundColor: MyColors.myBlue,
+                  child: Text(
+                    appointment.doctorName[0].toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 SizedBox(width: 16.w),
                 // Doctor Info
@@ -259,7 +308,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        appointment.doctor.name,
+                        appointment.doctorName,
                         style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
@@ -268,24 +317,25 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        appointment.doctor.specialty,
+                        'Doctor', // Generic label since we don't have specialty
                         style: TextStyle(
                           fontSize: 14.sp,
                           color: MyColors.myGrey,
                         ),
                       ),
                       SizedBox(height: 8.h),
+                      // Hospital info not available in new model
                       Row(
                         children: [
                           Icon(
-                            Icons.local_hospital,
+                            Icons.event_note,
                             size: 16.sp,
                             color: MyColors.myGrey,
                           ),
                           SizedBox(width: 4.w),
                           Expanded(
                             child: Text(
-                              appointment.doctor.hospital,
+                              'Appointment ID: ${appointment.id ?? "N/A"}',
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: MyColors.myGrey,

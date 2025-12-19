@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../logic/models/appointment.dart';
 import '../widgets/app_text_button.dart';
-import '../logic/appointment_logic/appointment_repository.dart';
+import '../logic/appointment_logic/appointment_service.dart';
 import 'appointment_confirmation_screen.dart';
 
 class AppointmentFormScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   DateTime? _selectedDate;
   String? _selectedTime;
   final TextEditingController _notesController = TextEditingController();
-  final AppointmentRepository _appointmentRepository = AppointmentRepository();
+  final AppointmentService _appointmentService = AppointmentService();
   bool _isSubmitting = false;
   final List<String> _availableTimes = [
     '09:00 AM',
@@ -103,17 +104,26 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       return;
     }
 
-      setState(() => _isSubmitting = true);
+    setState(() => _isSubmitting = true);
 
-      try {
-        final appointment = await _appointmentRepository.createAppointment(
-          doctor: _selectedDoctor!,
-          date: _selectedDate!,
-          time: _selectedTime!,
-          notes: _notesController.text.trim().isEmpty
-              ? null
-              : _notesController.text.trim(),
-        );
+    try {
+      // Get current user ID from Firebase Auth
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId == null) {
+        throw Exception('User not authenticated. Please log in first.');
+      }
+
+      final appointment = await _appointmentService.createAppointment(
+        userId: userId,
+        doctorId: _selectedDoctor!.id,
+        doctorName: _selectedDoctor!.name,
+        date: _selectedDate!,
+        time: _selectedTime!,
+        notes: _notesController.text.trim().isEmpty
+            ? null
+            : _notesController.text.trim(),
+      );
 
       setState(() => _isSubmitting = false);
 
@@ -121,8 +131,10 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                AppointmentConfirmationScreen(appointment: appointment),
+            builder: (context) => AppointmentConfirmationScreen(
+              appointment: appointment,
+              doctor: _selectedDoctor!,
+            ),
           ),
         );
       }
@@ -203,59 +215,59 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 ),
                 child: _selectedDoctor != null
                     ? Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30.r,
-                      backgroundImage: AssetImage(_selectedDoctor!.image),
-                    ),
-                    SizedBox(width: 16.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            _selectedDoctor!.name,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                              color: MyColors.myBlue,
+                          CircleAvatar(
+                            radius: 30.r,
+                            backgroundImage: AssetImage(_selectedDoctor!.image),
+                          ),
+                          SizedBox(width: 16.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _selectedDoctor!.name,
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: MyColors.myBlue,
+                                  ),
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  _selectedDoctor!.specialty,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: MyColors.myGrey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(height: 4.h),
+                          Icon(
+                            Icons.check_circle,
+                            color: MyColors.myBlue,
+                            size: 24.sp,
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Icon(
+                            Icons.person_add,
+                            color: MyColors.myGrey,
+                            size: 24.sp,
+                          ),
+                          SizedBox(width: 12.w),
                           Text(
-                            _selectedDoctor!.specialty,
+                            'Tap to select a doctor',
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 16.sp,
                               color: MyColors.myGrey,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Icon(
-                      Icons.check_circle,
-                      color: MyColors.myBlue,
-                      size: 24.sp,
-                    ),
-                  ],
-                )
-                    : Row(
-                  children: [
-                    Icon(
-                      Icons.person_add,
-                      color: MyColors.myGrey,
-                      size: 24.sp,
-                    ),
-                    SizedBox(width: 12.w),
-                    Text(
-                      'Tap to select a doctor',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: MyColors.myGrey,
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
             SizedBox(height: 30.h),
@@ -418,7 +430,9 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 fontWeight: FontWeight.bold,
               ),
               onPressed: _isSubmitting ? () {} : _submitAppointment,
-              backgroundColor: _isSubmitting ? MyColors.myGrey : MyColors.myBlue,
+              backgroundColor: _isSubmitting
+                  ? MyColors.myGrey
+                  : MyColors.myBlue,
               borderRadius: 16.r,
               buttonHeight: 56.h,
             ),

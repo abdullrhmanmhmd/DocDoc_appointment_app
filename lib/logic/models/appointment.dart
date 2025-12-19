@@ -24,7 +24,7 @@ class Appointment {
   }) : createdAt = createdAt ?? DateTime.now();
 
   bool get isUpcoming => status == AppointmentStatus.upcoming;
-  bool get isPast => status == AppointmentStatus.past;
+  bool get isPast => status == AppointmentStatus.completed;
   bool get isCancelled => status == AppointmentStatus.cancelled;
 
   Appointment copyWith({

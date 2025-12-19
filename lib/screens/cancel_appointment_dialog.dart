@@ -5,8 +5,13 @@ import '../logic/models/appointment.dart';
 
 class CancelAppointmentDialog extends StatelessWidget {
   final Appointment appointment;
+  final String doctorName;
 
-  const CancelAppointmentDialog({super.key, required this.appointment});
+  const CancelAppointmentDialog({
+    super.key,
+    required this.appointment,
+    required this.doctorName,
+  });
 
   String _formatDate(DateTime date) {
     const months = [
@@ -91,7 +96,15 @@ class CancelAppointmentDialog extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 25.r,
-                        backgroundImage: AssetImage(appointment.doctor.image),
+                        backgroundColor: MyColors.myBlue,
+                        child: Text(
+                          doctorName[0].toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       SizedBox(width: 12.w),
                       Expanded(
@@ -99,7 +112,7 @@ class CancelAppointmentDialog extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              appointment.doctor.name,
+                              doctorName,
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
@@ -107,7 +120,7 @@ class CancelAppointmentDialog extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              appointment.doctor.specialty,
+                              'Doctor',
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: MyColors.myGrey,

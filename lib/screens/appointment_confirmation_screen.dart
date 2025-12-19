@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core/constants/color_theme.dart';
 import '../logic/models/appointment.dart';
+import '../logic/models/doctor.dart';
 import '../widgets/app_text_button.dart';
 import 'my_appointments_screen.dart';
 
 class AppointmentConfirmationScreen extends StatelessWidget {
   final Appointment appointment;
+  final Doctor doctor;
 
-  const AppointmentConfirmationScreen({super.key, required this.appointment});
+  const AppointmentConfirmationScreen({
+    super.key,
+    required this.appointment,
+    required this.doctor,
+  });
 
   String _formatDate(DateTime date) {
     const months = [
@@ -102,7 +108,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 35.r,
-                          backgroundImage: AssetImage(appointment.doctor.image),
+                          backgroundImage: AssetImage(doctor.image),
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
@@ -110,7 +116,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                appointment.doctor.name,
+                                doctor.name,
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.bold,
@@ -119,7 +125,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4.h),
                               Text(
-                                appointment.doctor.specialty,
+                                doctor.specialty,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   color: MyColors.myGrey,
@@ -155,7 +161,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                     _buildDetailRow(
                       icon: Icons.local_hospital,
                       label: 'Hospital',
-                      value: appointment.doctor.hospital,
+                      value: doctor.hospital,
                     ),
 
                     // Notes (if available)
