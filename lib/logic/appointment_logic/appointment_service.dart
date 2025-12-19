@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/appointment.dart';
+import 'appointment_validator.dart';
 
 /// Service class for managing appointment operations with Firebase Firestore
 class AppointmentService {
@@ -22,19 +23,14 @@ class AppointmentService {
     required String time,
     String? notes,
   }) async {
-    // Input validation
-    if (userId.isEmpty) {
-      throw ArgumentError('User ID cannot be empty');
-    }
-    if (doctorId.isEmpty) {
-      throw ArgumentError('Doctor ID cannot be empty');
-    }
-    if (doctorName.isEmpty) {
-      throw ArgumentError('Doctor name cannot be empty');
-    }
-    if (time.isEmpty) {
-      throw ArgumentError('Time cannot be empty');
-    }
+    // Validate appointment data
+    AppointmentValidator.validateAppointment(
+      userId: userId,
+      doctorId: doctorId,
+      doctorName: doctorName,
+      date: date,
+      time: time,
+    );
 
     // Create appointment object
     final appointment = Appointment(
