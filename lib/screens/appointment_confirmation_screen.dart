@@ -102,7 +102,12 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 35.r,
-                          backgroundImage: AssetImage(appointment.doctor.image),
+                          backgroundColor: MyColors.myBlue.withOpacity(0.1),
+                          child: Icon(
+                            Icons.person,
+                            size: 35.sp,
+                            color: MyColors.myBlue,
+                          ),
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
@@ -110,7 +115,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                appointment.doctor.name,
+                                appointment.doctorName,
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.bold,
@@ -119,7 +124,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 4.h),
                               Text(
-                                appointment.doctor.specialty,
+                                'Doctor ID: ${appointment.doctorId}',
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   color: MyColors.myGrey,
@@ -148,14 +153,6 @@ class AppointmentConfirmationScreen extends StatelessWidget {
                       icon: Icons.access_time,
                       label: 'Time',
                       value: appointment.time,
-                    ),
-                    SizedBox(height: 16.h),
-
-                    // Hospital
-                    _buildDetailRow(
-                      icon: Icons.local_hospital,
-                      label: 'Hospital',
-                      value: appointment.doctor.hospital,
                     ),
 
                     // Notes (if available)
