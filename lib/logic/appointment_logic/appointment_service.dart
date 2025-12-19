@@ -80,4 +80,83 @@ class AppointmentService {
       docSnapshot.id,
     );
   }
+
+  /// Fetches all appointments for a specific user
+  ///
+  /// Returns list of appointments sorted by date (newest first)
+  Future<List<Appointment>> getUserAppointments(String userId) async {
+    if (userId.isEmpty) {
+      throw ArgumentError('User ID cannot be empty');
+    }
+
+    final querySnapshot = await _firestore
+        .collection(_appointmentsCollection)
+        .where('userId', isEqualTo: userId)
+        .orderBy('date', descending: true)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => Appointment.fromJson(doc.data(), doc.id))
+        .toList();
+  }
+
+  /// Fetches upcoming appointments for a user
+  ///
+  /// Filters by status = 'upcoming' and sorts by date (soonest first)
+  Future<List<Appointment>> getUpcomingAppointments(String userId) async {
+    if (userId.isEmpty) {
+      throw ArgumentError('User ID cannot be empty');
+    }
+
+    final querySnapshot = await _firestore
+        .collection(_appointmentsCollection)
+        .where('userId', isEqualTo: userId)
+        .where('status', isEqualTo: 'upcoming')
+        .orderBy('date', descending: false)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => Appointment.fromJson(doc.data(), doc.id))
+        .toList();
+  }
+
+  /// Fetches past appointments for a user
+  ///
+  /// Filters by status = 'completed' and sorts by date (newest first)
+  Future<List<Appointment>> getPastAppointments(String userId) async {
+    if (userId.isEmpty) {
+      throw ArgumentError('User ID cannot be empty');
+    }
+
+    final querySnapshot = await _firestore
+        .collection(_appointmentsCollection)
+        .where('userId', isEqualTo: userId)
+        .where('status', isEqualTo: 'completed')
+        .orderBy('date', descending: true)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => Appointment.fromJson(doc.data(), doc.id))
+        .toList();
+  }
+
+  /// Fetches cancelled appointments for a user
+  ///
+  /// Filters by status = 'cancelled' and sorts by date (newest first)
+  Future<List<Appointment>> getCancelledAppointments(String userId) async {
+    if (userId.isEmpty) {
+      throw ArgumentError('User ID cannot be empty');
+    }
+
+    final querySnapshot = await _firestore
+        .collection(_appointmentsCollection)
+        .where('userId', isEqualTo: userId)
+        .where('status', isEqualTo: 'cancelled')
+        .orderBy('date', descending: true)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => Appointment.fromJson(doc.data(), doc.id))
+        .toList();
+  }
 }
