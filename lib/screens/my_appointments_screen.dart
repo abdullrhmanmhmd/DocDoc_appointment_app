@@ -319,7 +319,7 @@ class _MyAppointmentsScreenState extends State<MyAppointmentsScreen>
                       Text(
                         'Doctor', // Generic label since we don't have specialty
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 12.sp,
                           color: MyColors.myGrey,
                         ),
                       ),

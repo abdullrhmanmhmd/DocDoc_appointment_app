@@ -1,8 +1,8 @@
 {
   "project_info": {
-    "project_number": "289750308538",
-    "project_id": "docdoc-a6dd4",
-    "storage_bucket": "docdoc-a6dd4.firebasestorage.app"
+    "project_number": "412354226846",
+    "project_id": "doctor-app-48bd7",
+    "storage_bucket": "doctor-app-48bd7.firebasestorage.app"
   },
   "client": [
     {
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDasbjjs2tjzVcAqQIeQphS-oblxvG4r8c"
+          "current_key": "AIzaSyChpO5VsH5m94SPdLvAhxIYXFWl4WG5SlM"
         }
       ],
       "services": {
