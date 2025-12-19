@@ -1,6 +1,8 @@
 import 'package:doc_app_sw/core/constants/color_theme.dart';
 import 'package:doc_app_sw/core/network/api_error.dart';
 import 'package:doc_app_sw/logic/auth_logic/auth_repo.dart';
+import 'package:doc_app_sw/screens/edit_profile_screen.dart';
+import 'package:doc_app_sw/ui/login/login_screen.dart';
 import 'package:doc_app_sw/widgets/custom_snack.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User? firebaseUser;
 
   final AuthRepo authRepo = AuthRepo();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -40,6 +43,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print("Error fetching profile data: $e");
       ScaffoldMessenger.of(context).showSnackBar(customSnack(error ?? 'Error'));
     }
+  }
+
+  Future<void> _logout() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await _auth.signOut();
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      String errorMessage = 'Failed to logout';
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? 'An error occurred';
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(customSnack(errorMessage));
+      }
+    }
+  }
+
+  void _showLogoutConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Logout',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: MyColors.myBlack,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: MyColors.myGrey,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel', style: TextStyle(color: MyColors.myGrey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _logout();
+              },
+              child: Text('Logout', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -63,17 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          leading: Padding(
-            padding: const EdgeInsets.only(top: 25),
-            child: IconButton(
-              icon: Icon(
-                CupertinoIcons.back,
-                color: MyColors.myWhite,
-                size: 25,
-              ),
-              onPressed: () {},
-            ),
-          ),
+          leading: SizedBox.shrink(),
           actions: [
             Padding(
               padding: const EdgeInsets.only(top: 25, right: 16),
@@ -278,7 +344,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Colors.transparent,
                                 ),
                               ),
-                              onPressed: () async {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UpdateProfileScreen(),
+                                  ),
+                                );
+                              },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -327,7 +400,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Colors.transparent,
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: _showLogoutConfirmation,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
