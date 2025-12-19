@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:docdoc/core/constants/my_colors.dart';
-import 'package:docdoc/ui/widgets/app_text_button.dart';
-import 'package:docdoc/ui/widgets/app_text_form_field.dart';
-import 'package:docdoc/ui/widgets/custom_snack.dart';
+
+import '../core/constants/color_theme.dart';
+import '../widgets/app_text_button.dart';
+import '../widgets/app_text_form_field.dart';
+import '../widgets/custom_snack.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -19,19 +20,23 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final formKey = GlobalKey<FormState>();
 
-  bool isObscure = true;
+  bool isObscure = true; // Password visibility toggle
   bool isLoading = false;
 
+
+  // Controllers
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-  TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+
+  /// Update user profile
   Future<void> updateProfile() async {
     if (!formKey.currentState!.validate()) return;
 
@@ -39,18 +44,42 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
     try {
       final user = _auth.currentUser;
+      if (user == null) throw Exception('No authenticated user');
 
-      if (user == null) {
-        throw Exception('No authenticated user');
-      }
+
+
 
       if (emailController.text.trim() != user.email) {
+        if (passwordController.text.isEmpty) {
+          // Need current password to reauthenticate
+          ScaffoldMessenger.of(context).showSnackBar(
+            customSnack('Please enter your current password to change email.'),
+          );
+          setState(() => isLoading = false);
+          return;
+        }
+
+        // Reauthenticate with current password
+        final credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: passwordController.text.trim(),
+        );
+        await user.reauthenticateWithCredential(credential);
+
+        // Update email
         await user.updateEmail(emailController.text.trim());
       }
 
-      if (passwordController.text.isNotEmpty) {
+
+
+
+      if (passwordController.text.isNotEmpty &&
+          passwordController.text == confirmPasswordController.text) {
         await user.updatePassword(passwordController.text.trim());
       }
+
+
+
 
       await _firestore.collection('users').doc(user.uid).update({
         'name': nameController.text.trim(),
@@ -58,6 +87,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         'phone': phoneController.text.trim(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
+
 
       setState(() => isLoading = false);
 
@@ -73,12 +103,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     } on FirebaseAuthException catch (e) {
       setState(() => isLoading = false);
 
+      if (e.code == 'requires-recent-login') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          customSnack('Please log out and log in again to change email or password.'),
+        );
+        return;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         customSnack(e.message ?? 'Authentication error'),
       );
     } catch (e) {
       setState(() => isLoading = false);
-
       ScaffoldMessenger.of(context).showSnackBar(
         customSnack('Something went wrong'),
       );
@@ -89,14 +125,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       displacement: 60,
-      onRefresh: () async {
-        FocusScope.of(context).unfocus();
-      },
+      onRefresh: () async => FocusScope.of(context).unfocus(),
       color: MyColors.myBlue,
       backgroundColor: Colors.transparent,
       child: Scaffold(
         backgroundColor: MyColors.myWhite,
-
         appBar: AppBar(
           backgroundColor: MyColors.myWhite,
           elevation: 0,
@@ -131,6 +164,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             enabled: false,
             child: Column(
               children: [
+                // Avatar
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
                   child: Container(
@@ -149,6 +183,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     ),
                   ),
                 ),
+                // Form
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 30.h),
@@ -160,73 +195,71 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           hintText: 'Name',
                           controller: nameController,
                           validator: (value) =>
-                          value!.isEmpty ? 'Please enter your name' : null,
+                          value == null || value.isEmpty ? 'Please enter your name' : null,
                         ),
-                        SizedBox(height: 18.h),
 
+
+                        SizedBox(height: 18.h),
                         AppTextFormField(
                           hintText: 'Email',
                           controller: emailController,
                           validator: (value) =>
-                          value!.isEmpty ? 'Please enter your email' : null,
+                          value == null || value.isEmpty ? 'Please enter your email' : null,
                         ),
-                        SizedBox(height: 18.h),
 
+
+                        SizedBox(height: 18.h),
                         AppTextFormField(
                           hintText: 'Phone',
                           controller: phoneController,
                           validator: (value) =>
-                          value!.isEmpty ? 'Please enter your phone' : null,
+                          value == null || value.isEmpty ? 'Please enter your phone' : null,
                         ),
-                        SizedBox(height: 18.h),
 
+
+                        SizedBox(height: 18.h),
                         AppTextFormField(
                           hintText: 'Password',
                           controller: passwordController,
                           isPassword: isObscure,
-                          validator: (value) =>
-                          value!.isEmpty ? 'Please enter your password' : null,
+                          validator: (value) => null, // optional
                           suffixIcon: GestureDetector(
-                            onTap: () =>
-                                setState(() => isObscure = !isObscure),
+                            onTap: () => setState(() => isObscure = !isObscure),
                             child: Icon(
-                              isObscure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
+                              isObscure ? Icons.visibility_off : Icons.visibility,
                               color: MyColors.myGrey,
                               size: 20.sp,
                             ),
                           ),
                         ),
-                        SizedBox(height: 18.h),
 
+
+                        SizedBox(height: 18.h),
                         AppTextFormField(
                           hintText: 'Confirm Password',
                           controller: confirmPasswordController,
                           isPassword: isObscure,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please confirm your password';
-                            }
-                            if (value != passwordController.text) {
+                            if (passwordController.text.isNotEmpty &&
+                                value != passwordController.text) {
                               return 'Passwords do not match';
                             }
                             return null;
                           },
+
+
                           suffixIcon: GestureDetector(
-                            onTap: () =>
-                                setState(() => isObscure = !isObscure),
+                            onTap: () => setState(() => isObscure = !isObscure),
                             child: Icon(
-                              isObscure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
+                              isObscure ? Icons.visibility_off : Icons.visibility,
                               color: MyColors.myGrey,
                               size: 20.sp,
                             ),
                           ),
                         ),
-                        SizedBox(height: 30.h),
 
+
+                        SizedBox(height: 30.h),
                         isLoading
                             ? CircularProgressIndicator(
                           color: MyColors.myBlue,
@@ -253,3 +286,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 }
+
+extension on User {
+  Future<void> updateEmail(String trim) async {}
+}
+

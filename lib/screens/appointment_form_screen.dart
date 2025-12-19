@@ -103,30 +103,17 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       return;
     }
 
-    // Check if doctor has an ID for API call
-    if (_selectedDoctor!.id == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selected doctor is not available for booking'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+      setState(() => _isSubmitting = true);
 
-    setState(() => _isSubmitting = true);
-
-    try {
-      // Create appointment via API
-      final appointment = await _appointmentRepository.createAppointment(
-        doctorId: _selectedDoctor!.id!,
-        date: _selectedDate!.toIso8601String().split('T')[0], // Format: YYYY-MM-DD
-        time: _selectedTime!,
-        notes: _notesController.text.trim().isEmpty
-            ? null
-            : _notesController.text.trim(),
-        appointmentType: 'in-person',
-      );
+      try {
+        final appointment = await _appointmentRepository.createAppointment(
+          doctor: _selectedDoctor!,
+          date: _selectedDate!,
+          time: _selectedTime!,
+          notes: _notesController.text.trim().isEmpty
+              ? null
+              : _notesController.text.trim(),
+        );
 
       setState(() => _isSubmitting = false);
 
