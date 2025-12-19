@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doc_app_sw/core/constants/color_theme.dart';
+import 'package:doc_app_sw/widgets/app_text_button.dart';
+import 'package:doc_app_sw/widgets/app_text_form_field.dart';
+import 'package:doc_app_sw/widgets/custom_snack.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../core/constants/color_theme.dart';
-import '../widgets/app_text_button.dart';
-import '../widgets/app_text_form_field.dart';
-import '../widgets/custom_snack.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -26,14 +26,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   // Controllers
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
   /// Update user profile
@@ -49,44 +46,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
 
 
-      if (emailController.text.trim() != user.email) {
-        if (passwordController.text.isEmpty) {
-          // Need current password to reauthenticate
-          ScaffoldMessenger.of(context).showSnackBar(
-            customSnack('Please enter your current password to change email.'),
-          );
-          setState(() => isLoading = false);
-          return;
-        }
-
-        // Reauthenticate with current password
-        final credential = EmailAuthProvider.credential(
-          email: user.email!,
-          password: passwordController.text.trim(),
-        );
-        await user.reauthenticateWithCredential(credential);
-
-        // Update email
-        await user.updateEmail(emailController.text.trim());
+      // Update display name
+      if (nameController.text.trim().isNotEmpty) {
+        await user.updateDisplayName(nameController.text.trim());
       }
 
-
-
-
-      if (passwordController.text.isNotEmpty &&
-          passwordController.text == confirmPasswordController.text) {
+      // Update password
+      if (passwordController.text.isNotEmpty) {
         await user.updatePassword(passwordController.text.trim());
       }
 
-
-
-
-      await _firestore.collection('users').doc(user.uid).update({
-        'name': nameController.text.trim(),
-        'email': emailController.text.trim(),
-        'phone': phoneController.text.trim(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
+      await user.reload();
 
 
       setState(() => isLoading = false);
@@ -201,28 +171,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                         SizedBox(height: 18.h),
                         AppTextFormField(
-                          hintText: 'Email',
-                          controller: emailController,
-                          validator: (value) =>
-                          value == null || value.isEmpty ? 'Please enter your email' : null,
-                        ),
-
-
-                        SizedBox(height: 18.h),
-                        AppTextFormField(
-                          hintText: 'Phone',
-                          controller: phoneController,
-                          validator: (value) =>
-                          value == null || value.isEmpty ? 'Please enter your phone' : null,
-                        ),
-
-
-                        SizedBox(height: 18.h),
-                        AppTextFormField(
-                          hintText: 'Password',
+                          hintText: 'New Password',
                           controller: passwordController,
                           isPassword: isObscure,
-                          validator: (value) => null, // optional
+                          validator: (value) =>
+                          value!.isEmpty ? 'Please enter your new password' : null,
                           suffixIcon: GestureDetector(
                             onTap: () => setState(() => isObscure = !isObscure),
                             child: Icon(
@@ -236,12 +189,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                         SizedBox(height: 18.h),
                         AppTextFormField(
-                          hintText: 'Confirm Password',
+                          hintText: 'Confirm New Password',
                           controller: confirmPasswordController,
                           isPassword: isObscure,
                           validator: (value) {
-                            if (passwordController.text.isNotEmpty &&
-                                value != passwordController.text) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please confirm your new password';
+                            }
+                            if (value != passwordController.text) {
                               return 'Passwords do not match';
                             }
                             return null;
@@ -286,8 +241,3 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 }
-
-extension on User {
-  Future<void> updateEmail(String trim) async {}
-}
-
