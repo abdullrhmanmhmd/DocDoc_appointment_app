@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../core/constants/color_theme.dart';
 import '../logic/models/doctor.dart';
 import '../logic/services/doctor_service.dart';
@@ -10,47 +11,13 @@ import '../screens/my_appointments_screen.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-
   final DoctorService _doctorService = DoctorService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.myWhite,
-
-      appBar: AppBar(
-        backgroundColor: MyColors.myWhite,
-        elevation: 0,
-        title: Text(
-          "Home",
-          style: TextStyle(color: MyColors.myBlue, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () async {
-              final doctors = await _doctorService.getDoctors().first;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.calendar_today, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MyAppointmentsScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -65,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hi, Momon👋",
+                        "Hi, ${_getUserName()}",
                         style: TextStyle(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
@@ -176,7 +143,7 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 15.h),
 
-            StreamBuilder<List<Doctor>>(
+              StreamBuilder<List<Doctor>>(
                 stream: _doctorService.getDoctors(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -209,6 +176,16 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getUserName() {
+    User? user = _auth.currentUser;
+    if (user != null &&
+        user.displayName != null &&
+        user.displayName!.isNotEmpty) {
+      return user.displayName!.split(' ')[0]; // Get first name
+    }
+    return "User"; // Fallback if no name is set
   }
 
   Widget _buildSpecialityIcon(IconData icon, String title) {
