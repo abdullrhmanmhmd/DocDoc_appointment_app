@@ -159,4 +159,28 @@ class AppointmentService {
         .map((doc) => Appointment.fromJson(doc.data(), doc.id))
         .toList();
   }
+
+  /// Cancels an appointment by updating its status to 'cancelled'
+  ///
+  /// Returns true if successful, false if appointment not found
+  Future<bool> cancelAppointment(String appointmentId) async {
+    if (appointmentId.isEmpty) {
+      throw ArgumentError('Appointment ID cannot be empty');
+    }
+
+    final docRef = _firestore
+        .collection(_appointmentsCollection)
+        .doc(appointmentId);
+
+    // Check if document exists
+    final docSnapshot = await docRef.get();
+    if (!docSnapshot.exists) {
+      return false;
+    }
+
+    // Update status to cancelled
+    await docRef.update({'status': 'cancelled'});
+
+    return true;
+  }
 }
